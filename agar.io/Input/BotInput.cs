@@ -12,7 +12,7 @@ public class BotInput : IInput
 	private float waitTime = 1;
 	private Vector2f targetPosition = new Vector2f(0, 0);
 	
-	public Vector2f GetFinalPosition(Window window)
+	public Vector2f GetDirection(Window window)
 	{
 		if (clock.ElapsedTime.AsSeconds() >= waitTime)
 		{

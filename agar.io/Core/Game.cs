@@ -41,13 +41,13 @@ public class Game
 		players.Clear();
 		food.Clear();
 		
-		CreatePlayer(new Vector2f(GameConfiguration.MapWidth / 2, GameConfiguration.MapHeight / 2), new MouseInput ());
-		for (int i = 0; i < 20; i++)
+		CreatePlayer(new Vector2f(GameConfiguration.MapWidth / 2, GameConfiguration.MapHeight / 2), new MouseInput (camera));
+		for (int i = 0; i < GameConfiguration.MaxPlayers; i++)
 		{
 			CreatePlayer(new BotInput ());
 		}
 
-		for (int i = 0; i < 1000; i++)
+		for (int i = 0; i < GameConfiguration.MaxFood; i++)
 		{
 			CreateFood ();
 		}
@@ -84,7 +84,7 @@ public class Game
 		{
 			if (CheckCollision(players[i].Shape, food[i1].shape))
 			{
-				players[i].Shape.Radius += 1;
+				players[i].AddMass(1);
 
 				DeleteFood(food[i1]);
 
@@ -106,15 +106,13 @@ public class Game
 			{
 				if (players[i].Shape.Radius > players[otherPlayer].Shape.Radius)
 				{
-					if (players[i].Shape.Radius < GameConfiguration.MaxRadius)
-						players[i].Shape.Radius += players[otherPlayer].Shape.Radius / 2;
+					players[i].AddMass(players[otherPlayer].Shape.Radius / 2);
 
 					DeletePlayer(players[otherPlayer]);
 				}
 				else
 				{
-					if (players[otherPlayer].Shape.Radius < GameConfiguration.MaxRadius)
-						players[otherPlayer].Shape.Radius += players[i].Shape.Radius / 2;
+					players[otherPlayer].AddMass(players[i].Shape.Radius / 2);
 
 					DeletePlayer(players[i]);
 				}

@@ -5,5 +5,5 @@ namespace agar.io.Input.Interfaces;
 
 public interface IInput
 {
-	public Vector2f GetFinalPosition(Window window);
+	public Vector2f GetDirection(Window window);
 }

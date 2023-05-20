@@ -27,7 +27,7 @@ public class Player : IDrawable, IUpdatable
 		
 		if (isPlayer)
 		{
-			Shape.OutlineColor = Color.Red;
+			Shape.OutlineColor = Color.Black;
 			Shape.OutlineThickness = 3f;
 		}
 		
@@ -53,25 +53,15 @@ public class Player : IDrawable, IUpdatable
 
 	private void UpdateMovement()
 	{
-		Vector2f targetPosition = input.GetFinalPosition(Game.Window);
-
+		Vector2f targetPosition = input.GetDirection(Game.Window);
 		Vector2f direction = targetPosition - Shape.Position;
-		
+
 		if (direction != new Vector2f(0, 0))
 		{
-			direction = direction / MathF.Sqrt((direction.X * direction.X) + (direction.Y * direction.Y));
+			float magnitude = MathF.Sqrt((direction.X * direction.X) + (direction.Y * direction.Y));
+			direction /= magnitude;
 
-			float distanceToTarget = MathF.Sqrt((targetPosition.X - position.X) * (targetPosition.X - position.X) +
-			                                    (targetPosition.Y - position.Y) * (targetPosition.Y - position.Y));
-
-			if (distanceToTarget <= movementSpeed)
-			{
-				position = targetPosition;
-			}
-			else
-			{
-				position += direction * movementSpeed;
-			}
+			position += direction * movementSpeed;
 		}
 		
 		ClampMovement ();
@@ -90,5 +80,14 @@ public class Player : IDrawable, IUpdatable
 			position.Y = Shape.Radius;
 		else if (position.Y > GameConfiguration.MapWidth - Shape.Radius)
 			position.Y = GameConfiguration.MapWidth - Shape.Radius;
+	}
+	
+	public void AddMass(float mass)
+	{
+		if (Shape.Radius + mass > GameConfiguration.MaxRadius)
+			return;
+		
+		Shape.Radius += mass;
+		Shape.Origin = new Vector2f(Shape.Radius, Shape.Radius);
 	}
 }
