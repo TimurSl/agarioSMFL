@@ -45,7 +45,6 @@ The following features and improvements can be considered for future development
 - Adding different game modes and levels.
 - Enhancing the game visuals and adding animations.
 - Optimizing performance and memory usage.
-- Fixing bug with mouse input.
 
 Feel free to contribute to the project by submitting pull requests or opening issues for any bugs or suggestions.
 
