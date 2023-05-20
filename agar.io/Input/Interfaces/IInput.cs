@@ -1,7 +1,7 @@
 ﻿using SFML.System;
 using SFML.Window;
 
-namespace agar.io;
+namespace agar.io.Input.Interfaces;
 
 public interface IInput
 {

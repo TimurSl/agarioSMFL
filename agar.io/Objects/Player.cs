@@ -1,7 +1,11 @@
-﻿using SFML.Graphics;
+﻿using agar.io.Core;
+using agar.io.Core.Types;
+using agar.io.Input.Interfaces;
+using agar.io.Objects.Interfaces;
+using SFML.Graphics;
 using SFML.System;
 
-namespace agar.io;
+namespace agar.io.Objects;
 
 public class Player : IDrawable, IUpdatable
 {

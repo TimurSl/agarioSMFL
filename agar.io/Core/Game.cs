@@ -1,8 +1,13 @@
-﻿using SFML.Graphics;
+﻿using agar.io.Core.Types;
+using agar.io.Input;
+using agar.io.Input.Interfaces;
+using agar.io.Objects;
+using agar.io.Objects.Interfaces;
+using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace agar.io;
+namespace agar.io.Core;
 
 public class Game
 {

@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 
-namespace agar.io;
+namespace agar.io.Objects.Interfaces;
 
 public interface IDrawable
 {

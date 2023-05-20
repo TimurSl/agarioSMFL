@@ -1,7 +1,10 @@
-﻿using SFML.System;
+﻿using agar.io.Core;
+using agar.io.Core.Types;
+using agar.io.Input.Interfaces;
+using SFML.System;
 using SFML.Window;
 
-namespace agar.io;
+namespace agar.io.Input;
 
 public class BotInput : IInput
 {

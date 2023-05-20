@@ -1,7 +1,8 @@
-﻿using SFML.System;
+﻿using agar.io.Input.Interfaces;
+using SFML.System;
 using SFML.Window;
 
-namespace agar.io;
+namespace agar.io.Input;
 
 public class MouseInput : IInput
 {

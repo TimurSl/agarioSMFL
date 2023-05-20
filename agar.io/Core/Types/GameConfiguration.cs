@@ -1,4 +1,4 @@
-﻿namespace agar.io;
+﻿namespace agar.io.Core.Types;
 
 public class GameConfiguration
 {

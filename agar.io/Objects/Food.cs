@@ -1,7 +1,9 @@
-﻿using SFML.Graphics;
+﻿using agar.io.Core;
+using agar.io.Objects.Interfaces;
+using SFML.Graphics;
 using SFML.System;
 
-namespace agar.io;
+namespace agar.io.Objects;
 
 public class Food : IDrawable
 {

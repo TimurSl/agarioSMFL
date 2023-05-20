@@ -1,4 +1,4 @@
-﻿namespace agar.io;
+﻿namespace agar.io.Objects.Interfaces;
 
 public interface IUpdatable
 {
