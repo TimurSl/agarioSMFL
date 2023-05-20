@@ -12,7 +12,6 @@ public static class Time
 	{
 		stopwatch = new Stopwatch();
 		stopwatch.Start();
-
 	}
 
 	public static void Update()
