@@ -155,6 +155,7 @@ public class Game
 	
 	private void Update()
 	{
+		Types.Time.Update ();
 		foreach (IUpdatable updatable in updatables)
 		{
 			updatable.Update();

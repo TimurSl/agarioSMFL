@@ -4,6 +4,7 @@ using agar.io.Input.Interfaces;
 using agar.io.Objects.Interfaces;
 using SFML.Graphics;
 using SFML.System;
+using Time = agar.io.Core.Types.Time;
 
 namespace agar.io.Objects;
 
@@ -16,7 +17,7 @@ public class Player : IDrawable, IUpdatable
 
 	public int ZIndex { get; set; } = 1;
 
-	private readonly float movementSpeed = 2f;
+	private readonly float movementSpeed = 200f;
 	private readonly IInput input;
 
 
@@ -75,7 +76,7 @@ public class Player : IDrawable, IUpdatable
 			float magnitude = MathF.Sqrt((direction.X * direction.X) + (direction.Y * direction.Y));
 			direction /= magnitude;
 
-			Position += direction * movementSpeed;
+			Position += direction * movementSpeed * Time.DeltaTime;
 		}
 		
 		ClampMovement ();
