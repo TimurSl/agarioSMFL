@@ -19,7 +19,7 @@ The repository includes the following files:
 
 ## Development Progress
 
-During the session, the following tasks were completed:
+During the development, the following tasks were completed:
 
 1. Initialization and setup of the game window, including window size and title.
 2. Creation of the player object and its input handling.
