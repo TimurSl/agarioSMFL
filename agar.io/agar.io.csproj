@@ -12,4 +12,11 @@
       <PackageReference Include="SFML.Utils" Version="0.1.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Fonts\arial.ttf" />
+      <EmbeddedResource Include="Fonts\arial.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

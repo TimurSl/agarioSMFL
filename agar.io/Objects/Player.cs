@@ -9,14 +9,18 @@ namespace agar.io.Objects;
 
 public class Player : IDrawable, IUpdatable
 {
-	public CircleShape Shape;
-	public bool IsPlayer = false;
-	public Vector2f position;
+	public readonly CircleShape Shape;
+	public readonly bool IsPlayer = false;
+	public Vector2f Position;
+	public readonly Text NickNameLabel;
 
-	private float movementSpeed = 2f;
-	private IInput input;
+	public int ZIndex { get; set; } = 1;
 
-	public Player(Vector2f pos, int radius, IInput input, bool isPlayer = false)
+	private readonly float movementSpeed = 2f;
+	private readonly IInput input;
+
+
+	public Player(Vector2f pos, int radius, IInput input, bool isPlayer = false, Text nickName = null)
 	{
 		Color randomColor = new Color((byte)Game.Random.Next(0, 255), (byte)Game.Random.Next(0, 255), (byte)Game.Random.Next(0, 255));
 
@@ -32,15 +36,23 @@ public class Player : IDrawable, IUpdatable
 		}
 		
 		
-		this.position = pos;
+		this.Position = pos;
 		this.input = input;
 		this.IsPlayer = isPlayer;
+		this.NickNameLabel = nickName;
 	}
 	
-	
+	~Player()
+	{
+		Shape.Dispose();
+		NickNameLabel.TextClass.Dispose ();
+	}
+
+
 	public void Draw(RenderTarget target)
 	{
 		target.Draw(Shape);
+		NickNameLabel.Draw(target);
 	}
 
 	public void Update()
@@ -49,6 +61,8 @@ public class Player : IDrawable, IUpdatable
 		Shape.Origin = new Vector2f(Shape.Radius, Shape.Radius);
 		
 		UpdateMovement();
+
+		NickNameLabel.SetPosition(new Vector2f(Shape.Position.X, Shape.Position.Y - Shape.Radius - 30));
 	}
 
 	private void UpdateMovement()
@@ -61,25 +75,25 @@ public class Player : IDrawable, IUpdatable
 			float magnitude = MathF.Sqrt((direction.X * direction.X) + (direction.Y * direction.Y));
 			direction /= magnitude;
 
-			position += direction * movementSpeed;
+			Position += direction * movementSpeed;
 		}
 		
 		ClampMovement ();
 
-		Shape.Position = position;
+		Shape.Position = Position;
 	}
 
 	private void ClampMovement()
 	{
-		if (position.X < Shape.Radius)
-			position.X = Shape.Radius;
-		else if (position.X > GameConfiguration.MapWidth - Shape.Radius)
-			position.X = GameConfiguration.MapWidth - Shape.Radius;
+		if (Position.X < Shape.Radius)
+			Position.X = Shape.Radius;
+		else if (Position.X > GameConfiguration.MapWidth - Shape.Radius)
+			Position.X = GameConfiguration.MapWidth - Shape.Radius;
 
-		if (position.Y < Shape.Radius)
-			position.Y = Shape.Radius;
-		else if (position.Y > GameConfiguration.MapWidth - Shape.Radius)
-			position.Y = GameConfiguration.MapWidth - Shape.Radius;
+		if (Position.Y < Shape.Radius)
+			Position.Y = Shape.Radius;
+		else if (Position.Y > GameConfiguration.MapWidth - Shape.Radius)
+			Position.Y = GameConfiguration.MapWidth - Shape.Radius;
 	}
 	
 	public void AddMass(float mass)
@@ -90,4 +104,5 @@ public class Player : IDrawable, IUpdatable
 		Shape.Radius += mass;
 		Shape.Origin = new Vector2f(Shape.Radius, Shape.Radius);
 	}
+	
 }

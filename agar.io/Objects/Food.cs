@@ -8,9 +8,11 @@ namespace agar.io.Objects;
 public class Food : IDrawable
 {
 	public CircleShape shape;
-	
+	public int ZIndex { get; set; } = 0;
+
 	private float radius = 5f;
-	
+
+
 	public Food(Vector2f position)
 	{
 		Color randomColor = new Color((byte)Game.Random.Next(0, 255), (byte)Game.Random.Next(0, 255), (byte)Game.Random.Next(0, 255));
@@ -20,7 +22,7 @@ public class Food : IDrawable
 		shape.Origin = new Vector2f(radius, radius);
 		shape.FillColor = randomColor;
 	}
-	
+
 	public void Draw(RenderTarget target)
 	{
 		target.Draw(shape);

@@ -6,6 +6,7 @@ using agar.io.Objects.Interfaces;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using Text = agar.io.Objects.Text;
 
 namespace agar.io.Core;
 
@@ -41,7 +42,7 @@ public class Game
 		players.Clear();
 		food.Clear();
 		
-		CreatePlayer(new Vector2f(GameConfiguration.MapWidth / 2, GameConfiguration.MapHeight / 2), new MouseInput (camera));
+		CreatePlayer(new MouseInput (camera));
 		for (int i = 0; i < GameConfiguration.MaxPlayers; i++)
 		{
 			CreatePlayer(new BotInput ());
@@ -62,7 +63,7 @@ public class Game
 			UpdateCamera();
 			
 			Draw();
-			UpdateObjects();
+			Update();
 
 			for (var i = 0; i < players.Count; i++)
 			{
@@ -143,6 +144,8 @@ public class Game
 		Window.Clear(Color.White);
 
 		Window.SetView(camera);
+
+		drawables.Sort((drawable, drawable1) => drawable.ZIndex.CompareTo(drawable1.ZIndex));
 		
 		foreach (IDrawable drawable in drawables)
 		{
@@ -150,7 +153,7 @@ public class Game
 		}
 	}
 	
-	private void UpdateObjects()
+	private void Update()
 	{
 		foreach (IUpdatable updatable in updatables)
 		{
@@ -160,15 +163,18 @@ public class Game
 	
 	private void CreatePlayer(IInput input)
 	{
+		string name = $"Player {players.Count + 1}";
+		if (input is BotInput)
+		{
+			name = $"Bot {players.Count + 1}";
+		}
+		
+		Text text = new Text(name, 20, Color.White, new Vector2f(0, 0));
+		RegisterActor(text);
+		
 		Vector2f position = new Vector2f(Random.Next(0, (int) GameConfiguration.MapWidth), Random.Next(0, (int) GameConfiguration.MapHeight));
-		Player player = new Player(position, GameConfiguration.DefaultPlayerRadius, input, input is MouseInput);
-		RegisterActor(player, player);
-		players.Add(player);
-	}
-	
-	private void CreatePlayer(Vector2f pos, IInput input)
-	{
-		Player player = new Player(pos, GameConfiguration.DefaultPlayerRadius, input, input is MouseInput);
+		Player player = new Player(position, GameConfiguration.DefaultPlayerRadius, input, input is MouseInput, text);
+		
 		RegisterActor(player, player);
 		players.Add(player);
 	}
@@ -198,14 +204,19 @@ public class Game
 	private void DeletePlayer(Player player)
 	{
 		drawables.Remove(player);
+		drawables.Remove(player.NickNameLabel);
+		
 		players.Remove(player);
+		
+		player = null;
 	}
 
 	private void UpdateCamera()
 	{
 		mainPlayer = players.Find(player => player.IsPlayer) ?? players[0];
-		Vector2f playerPosition = mainPlayer.position;
+		Vector2f playerPosition = mainPlayer.Position;
 
 		camera.Center = playerPosition;
 	}
+	
 }

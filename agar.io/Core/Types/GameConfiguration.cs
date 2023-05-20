@@ -1,4 +1,6 @@
-﻿namespace agar.io.Core.Types;
+﻿using SFML.Graphics;
+
+namespace agar.io.Core.Types;
 
 public class GameConfiguration
 {
@@ -13,4 +15,6 @@ public class GameConfiguration
 
 	public const int MaxPlayers = 20;
 	public const int MaxFood = 2000;
+	
+	public static Font Font = new Font(Path.Combine(Directory.GetCurrentDirectory (), "Fonts", "arial.ttf"));
 }
