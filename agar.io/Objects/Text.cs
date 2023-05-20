@@ -33,4 +33,14 @@ public class Text : IDrawable
 	{
 		TextClass.DisplayedString = message;
 	}
+	
+	public void SetColor(SFML.Graphics.Color color)
+	{
+		TextClass.FillColor = color;
+	}
+	
+	public string GetMessage()
+	{
+		return TextClass.DisplayedString;
+	}
 }

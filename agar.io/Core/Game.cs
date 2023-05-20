@@ -43,7 +43,7 @@ public class Game
 		food.Clear();
 		
 		CreatePlayer(new MouseInput (camera));
-		for (int i = 0; i < GameConfiguration.MaxPlayers; i++)
+		for (int i = 0; i < GameConfiguration.MaxBots; i++)
 		{
 			CreatePlayer(new BotInput ());
 		}
@@ -65,8 +65,16 @@ public class Game
 			Draw();
 			Update();
 
+			if (mainPlayer.Shape.Radius >= GameConfiguration.MaxRadius && GameConfiguration.MaxRadius < GameConfiguration.AbsoluteMaxRadius)
+			{
+				GameConfiguration.MaxRadius += GameConfiguration.MaxRadiusIncreaseStep;
+				camera.Zoom(1.1f);
+			}
+			
 			for (var i = 0; i < players.Count; i++)
 			{
+				Console.WriteLine($"{mainPlayer.NickName} - {mainPlayer.Shape.Radius} / {GameConfiguration.MaxRadius}");
+				
 				CheckCollisionWithFood(i);
 
 				CheckCollisionWithPlayer(i);
@@ -164,10 +172,10 @@ public class Game
 	
 	private void CreatePlayer(IInput input)
 	{
-		string name = $"Player {players.Count + 1}";
+		string name = $"Player {Random.Next(1000).ToString("0000")}";
 		if (input is BotInput)
 		{
-			name = $"Bot {players.Count + 1}";
+			name = $"Bot {Random.Next(1000).ToString("0000")}";
 		}
 		
 		Text text = new Text(name, 20, Color.White, new Vector2f(0, 0));

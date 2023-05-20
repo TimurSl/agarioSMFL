@@ -14,6 +14,7 @@ public class Player : IDrawable, IUpdatable
 	public readonly bool IsPlayer = false;
 	public Vector2f Position;
 	public readonly Text NickNameLabel;
+	public readonly string NickName = "Player";
 
 	public int ZIndex { get; set; } = 1;
 
@@ -41,6 +42,7 @@ public class Player : IDrawable, IUpdatable
 		this.input = input;
 		this.IsPlayer = isPlayer;
 		this.NickNameLabel = nickName;
+		this.NickName = nickName?.GetMessage () ?? "Player";
 	}
 	
 	~Player()
@@ -99,11 +101,16 @@ public class Player : IDrawable, IUpdatable
 	
 	public void AddMass(float mass)
 	{
+		float modifiedMass = Game.Random.Next(0, 100) > 50 ? mass * 2 : mass;
+
 		if (Shape.Radius + mass > GameConfiguration.MaxRadius)
 			return;
 		
-		Shape.Radius += mass;
+		Shape.Radius += modifiedMass;
+		Shape.Radius = Math.Clamp(Shape.Radius, 0, GameConfiguration.AbsoluteMaxRadius);
+		
 		Shape.Origin = new Vector2f(Shape.Radius, Shape.Radius);
+		Shape.Radius = MathF.Floor(Shape.Radius);
 	}
 	
 }
