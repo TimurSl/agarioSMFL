@@ -30,7 +30,7 @@ public class Player : IDrawable, IUpdatable
 		Shape.Position = pos;
 		Shape.FillColor = randomColor;
 		Shape.Origin = new Vector2f(radius, radius);
-		
+
 		if (isPlayer)
 		{
 			Shape.OutlineColor = Color.Black;
