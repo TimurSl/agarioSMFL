@@ -159,6 +159,27 @@ public class Game
 		{
 			drawable.Draw(Window);
 		}
+		
+		foreach(Player player in players)
+		{
+			if (player.IsPlayer)
+				continue;
+			
+			player.Shape.OutlineThickness = 3;
+
+			if (player.Shape.Radius > mainPlayer.Shape.Radius)
+			{
+				player.Shape.OutlineColor = GameConfiguration.darkRed;
+			}
+			else if (player.Shape.Radius < mainPlayer.Shape.Radius)
+			{
+				player.Shape.OutlineColor = GameConfiguration.darkGreen;
+			}
+			else
+			{
+				player.Shape.OutlineThickness = 0;
+			}
+		}
 	}
 	
 	private void Update()

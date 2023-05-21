@@ -101,12 +101,10 @@ public class Player : IDrawable, IUpdatable
 	
 	public void AddMass(float mass)
 	{
-		float modifiedMass = Game.Random.Next(0, 100) > 50 ? mass * 2 : mass;
-
 		if (Shape.Radius + mass > GameConfiguration.MaxRadius)
 			return;
 		
-		Shape.Radius += modifiedMass;
+		Shape.Radius += mass;
 		Shape.Radius = Math.Clamp(Shape.Radius, 0, GameConfiguration.AbsoluteMaxRadius);
 		
 		Shape.Origin = new Vector2f(Shape.Radius, Shape.Radius);
