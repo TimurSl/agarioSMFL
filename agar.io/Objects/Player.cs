@@ -19,7 +19,7 @@ public class Player : IDrawable, IUpdatable
 	public int ZIndex { get; set; } = 1;
 
 	private readonly float movementSpeed = 200f;
-	private readonly IInput input;
+	public readonly IInput input;
 
 
 	public Player(Vector2f pos, int radius, IInput input, bool isPlayer = false, Text nickName = null)
@@ -101,7 +101,7 @@ public class Player : IDrawable, IUpdatable
 	
 	public void AddMass(float mass)
 	{
-		if (Shape.Radius + mass > GameConfiguration.MaxRadius)
+		if (Shape.Radius + mass > GameConfiguration.AbsoluteMaxRadius)
 			return;
 		
 		Shape.Radius += mass;

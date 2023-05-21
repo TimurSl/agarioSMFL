@@ -6,7 +6,7 @@ public static class GameConfiguration
 {
 	public const int DefaultPlayerRadius = 10;
 	public static float MaxRadius = 200f;
-	public static float MaxRadiusIncreaseStep = 50f;
+	public static float MaxRadiusIncreaseStep = 65f;
 	public static float AbsoluteMaxRadius = 2000f;
 
 	public const int WindowWidth = 1280;
