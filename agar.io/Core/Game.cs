@@ -28,7 +28,7 @@ public class Game
 	public Game()
 	{
 		VideoMode videoMode = new VideoMode(GameConfiguration.WindowWidth, GameConfiguration.WindowHeight);
-		Window = new RenderWindow(videoMode, "Agar.io", Styles.Titlebar | Styles.Close);
+		Window = new RenderWindow(videoMode, "Agar.io Clone", Styles.Titlebar | Styles.Close);
 		Window.SetFramerateLimit(120);
 		
 		camera = new View(new FloatRect(0f, 0f, GameConfiguration.WindowWidth, GameConfiguration.WindowHeight));
@@ -79,8 +79,6 @@ public class Game
 
 				CheckCollisionWithPlayer(i);
 			}
-
-			// Window.SetView(Window.DefaultView);
 
 			Window.Display();
 		}
