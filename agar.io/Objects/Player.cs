@@ -18,7 +18,7 @@ public class Player : IDrawable, IUpdatable
 
 	public int ZIndex { get; set; } = 1;
 
-	private readonly float movementSpeed = 200f;
+	private float movementSpeed = 200f;
 	public readonly IInput input;
 
 
@@ -60,12 +60,11 @@ public class Player : IDrawable, IUpdatable
 
 	public void Update()
 	{
-		// Shape.Radius += 0.1f;
-		Shape.Origin = new Vector2f(Shape.Radius, Shape.Radius);
-		
 		UpdateMovement();
 
 		NickNameLabel.SetPosition(new Vector2f(Shape.Position.X, Shape.Position.Y - Shape.Radius - 30));
+		
+		movementSpeed = 200f - (Shape.Radius / 10f);
 	}
 
 	private void UpdateMovement()

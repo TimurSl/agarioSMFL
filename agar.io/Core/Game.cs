@@ -65,15 +65,22 @@ public class Game
 			Draw();
 			Update();
 
-			if (mainPlayer.Shape.Radius >= GameConfiguration.MaxRadius && GameConfiguration.MaxRadius < GameConfiguration.AbsoluteMaxRadius)
+			if (Keyboard.IsKeyPressed(Keyboard.Key.O))
 			{
-				GameConfiguration.MaxRadius += GameConfiguration.MaxRadiusIncreaseStep;
-				camera.Zoom(1.1f);
+				mainPlayer.AddMass(1);
 			}
 			
+			float zoomFactor = 1f + (mainPlayer.Shape.Radius / GameConfiguration.MaxRadius) * 0.1f;
+
+			if (mainPlayer.Shape.Radius >= GameConfiguration.MaxRadius &&
+			    GameConfiguration.MaxRadius < GameConfiguration.AbsoluteMaxRadius)
+			{
+				GameConfiguration.MaxRadius += GameConfiguration.MaxRadiusIncreaseStep;
+				camera.Zoom(zoomFactor);
+			}
+
 			for (var i = 0; i < players.Count; i++)
 			{
-				Console.WriteLine($"{mainPlayer.NickName} - {mainPlayer.Shape.Radius} / {GameConfiguration.MaxRadius}");
 				
 				CheckCollisionWithFood(i);
 
@@ -231,6 +238,7 @@ public class Game
 	
 	private void DeletePlayer(Player player)
 	{
+		Console.WriteLine($"Player {player.NickName} died");
 		drawables.Remove(player);
 		drawables.Remove(player.NickNameLabel);
 		
