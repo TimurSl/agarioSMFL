@@ -65,11 +65,6 @@ public class Game
 			Draw();
 			Update();
 
-			if (Keyboard.IsKeyPressed(Keyboard.Key.O))
-			{
-				mainPlayer.AddMass(1);
-			}
-			
 			float zoomFactor = 1f + (mainPlayer.Shape.Radius / GameConfiguration.MaxRadius) * 0.1f;
 
 			if (mainPlayer.Shape.Radius >= GameConfiguration.MaxRadius &&
