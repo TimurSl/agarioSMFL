@@ -65,12 +65,12 @@ public class Game
 			Draw();
 			Update();
 
-			for (var i = 0; i < players.Count; i++)
+			for (var pId = 0; pId < players.Count; pId++)
 			{
 				
-				CheckCollisionWithFood(i);
+				CheckCollisionWithFood(pId);
 
-				CheckCollisionWithPlayer(i);
+				CheckCollisionWithPlayer(pId);
 			}
 
 			Window.Display();
@@ -78,13 +78,13 @@ public class Game
 
 	}
 
-	private void CheckCollisionWithFood(int i)
+	private void CheckCollisionWithFood(int playeId)
 	{
 		for (var i1 = 0; i1 < food.Count; i1++)
 		{
-			if (CheckCollision(players[i].Shape, food[i1].shape))
+			if (CheckCollision(players[playeId].Shape, food[i1].shape))
 			{
-				players[i].AddMass(1);
+				players[playeId].AddMass(1);
 
 				DeleteFood(food[i1]);
 
@@ -93,28 +93,28 @@ public class Game
 		}
 	}
 
-	private void CheckCollisionWithPlayer(int i)
+	private void CheckCollisionWithPlayer(int playerId)
 	{
 		for (var otherPlayer = 0; otherPlayer < players.Count; otherPlayer++)
 		{
-			if (otherPlayer == i)
+			if (otherPlayer == playerId)
 			{
 				continue;
 			}
 
-			if (CheckCollision(players[i].Shape, players[otherPlayer].Shape))
+			if (CheckCollision(players[playerId].Shape, players[otherPlayer].Shape))
 			{
-				if (players[i].Shape.Radius > players[otherPlayer].Shape.Radius)
+				if (players[playerId].Shape.Radius > players[otherPlayer].Shape.Radius)
 				{
-					players[i].AddMass(players[otherPlayer].Shape.Radius / 2);
+					players[playerId].AddMass(players[otherPlayer].Shape.Radius / 2);
 
 					DeletePlayer(players[otherPlayer]);
 				}
 				else
 				{
-					players[otherPlayer].AddMass(players[i].Shape.Radius / 2);
+					players[otherPlayer].AddMass(players[playerId].Shape.Radius / 2);
 
-					DeletePlayer(players[i]);
+					DeletePlayer(players[playerId]);
 				}
 				
 				
@@ -139,11 +139,10 @@ public class Game
 	private void Draw()
 	{
 		Window.DispatchEvents();
-
 		Window.Clear(Color.White);
-
 		Window.SetView(camera);
 
+		// sort drawables by z-index, so that the ones with the highest z-index are drawn last
 		drawables.Sort((drawable, drawable1) => drawable.ZIndex.CompareTo(drawable1.ZIndex));
 		
 		foreach (IDrawable drawable in drawables)
@@ -151,6 +150,7 @@ public class Game
 			drawable.Draw(Window);
 		}
 		
+		// outline players
 		foreach(Player player in players)
 		{
 			if (player.IsPlayer)
@@ -172,6 +172,7 @@ public class Game
 			}
 		}
 		
+		// zoom out if player is too big
 		float zoomFactor = 1f + (mainPlayer.Shape.Radius / GameConfiguration.MaxRadius) * 0.1f;
 
 		if (mainPlayer.Shape.Radius >= GameConfiguration.MaxRadius &&
