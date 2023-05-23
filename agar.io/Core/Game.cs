@@ -65,15 +65,6 @@ public class Game
 			Draw();
 			Update();
 
-			float zoomFactor = 1f + (mainPlayer.Shape.Radius / GameConfiguration.MaxRadius) * 0.1f;
-
-			if (mainPlayer.Shape.Radius >= GameConfiguration.MaxRadius &&
-			    GameConfiguration.MaxRadius < GameConfiguration.AbsoluteMaxRadius)
-			{
-				GameConfiguration.MaxRadius += GameConfiguration.MaxRadiusIncreaseStep;
-				camera.Zoom(zoomFactor);
-			}
-
 			for (var i = 0; i < players.Count; i++)
 			{
 				
@@ -179,6 +170,15 @@ public class Game
 			{
 				player.Shape.OutlineThickness = 0;
 			}
+		}
+		
+		float zoomFactor = 1f + (mainPlayer.Shape.Radius / GameConfiguration.MaxRadius) * 0.1f;
+
+		if (mainPlayer.Shape.Radius >= GameConfiguration.MaxRadius &&
+		    GameConfiguration.MaxRadius < GameConfiguration.AbsoluteMaxRadius)
+		{
+			GameConfiguration.MaxRadius += GameConfiguration.MaxRadiusIncreaseStep;
+			camera.Zoom(zoomFactor);
 		}
 	}
 	
