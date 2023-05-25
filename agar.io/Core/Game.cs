@@ -4,6 +4,7 @@ using agar.io.Input;
 using agar.io.Objects;
 using SFML.Graphics;
 using SFML.System;
+using SFML.Window;
 using Text = agar.io.Objects.Text;
 
 namespace agar.io.Core;
@@ -17,12 +18,14 @@ public class Game
 	public static List<Player> Players = new();
 	public static List<Food> FoodList = new();
 
-	private View camera;
+	public static View Camera;
+	public static float CurrentCameraZoom = 1f;
+	
 	private Scoreboard scoreboard = new();
 	
 	public Game()
 	{
-		camera = new View(new FloatRect(0f, 0f, EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight));
+		Camera = new View(new FloatRect(0f, 0f, EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight));
 		Engine.RegisterActor(scoreboard);
 	}
 
@@ -35,7 +38,7 @@ public class Game
 		Player player = Engine.RegisterActor(
 			new Player(RandomMapPosition (), 
 				GameConfiguration.DefaultPlayerRadius, 
-				new MouseInput(camera), 
+				new MouseInput(Camera), 
 				true, 
 				new Text(
 					"Player",
@@ -99,13 +102,14 @@ public class Game
 
 			CheckCollisionWithPlayer(pId);
 		}
+		UpdateCamera (Player.LocalPlayer);
+
 	}
 
 	private void OnFrameStart()
 	{
-		io.Engine.Engine.Window.SetView(camera);
+		io.Engine.Engine.Window.SetView(Camera);
 		CheckZoom();
-		UpdateCamera (Player.LocalPlayer);
 	}
 
 	private void CheckCollisionWithFood(int playerId)
@@ -178,7 +182,8 @@ public class Game
 		    GameConfiguration.MaxRadiusUntilZoom < GameConfiguration.AbsoluteMaxRadius)
 		{
 			GameConfiguration.MaxRadiusUntilZoom += GameConfiguration.MaxRadiusIncreaseStep;
-			camera.Zoom(zoomFactor);
+			CurrentCameraZoom *= zoomFactor;
+			Camera.Zoom(zoomFactor);
 		}
 	}
 	
@@ -196,12 +201,17 @@ public class Game
 	{
 		Vector2f playerPosition = player.Position;
 
-		camera.Center = playerPosition;
+		Camera.Center = playerPosition;
 	}
 	
 	private Vector2f RandomMapPosition()
 	{
 		return new Vector2f(Random.Next(0, GameConfiguration.MapWidth), Random.Next(0, GameConfiguration.MapHeight));
+	}
+
+	public static Vector2f GetLeftTopCorner()
+	{
+		return new Vector2f(Camera.Center.X - Camera.Size.X / 2, Camera.Center.Y - Camera.Size.Y / 2);
 	}
 	
 }
