@@ -1,7 +1,6 @@
 using agar.io.Engine.Config;
 using agar.io.Engine.Interfaces;
 using agar.io.Engine.Types;
-using agar.io.Objects;
 using SFML.Graphics;
 using SFML.Window;
 
