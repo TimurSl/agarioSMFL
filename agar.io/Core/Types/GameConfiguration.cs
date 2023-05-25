@@ -5,7 +5,7 @@ namespace agar.io.Core.Types;
 public static class GameConfiguration
 {
 	public const int DefaultPlayerRadius = 10;
-	public static float MaxRadius = 200f;
+	public static float MaxRadiusUntilZoom = 200f;
 	public static float MaxRadiusIncreaseStep = 70f;
 	public static float AbsoluteMaxRadius = 1000f;
 

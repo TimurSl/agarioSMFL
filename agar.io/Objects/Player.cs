@@ -1,14 +1,14 @@
 ﻿using agar.io.Core;
 using agar.io.Core.Types;
+using agar.io.Engine.Interfaces;
 using agar.io.Input.Interfaces;
-using agar.io.Objects.Interfaces;
 using SFML.Graphics;
 using SFML.System;
-using Time = agar.io.Core.Types.Time;
+using Time = agar.io.Engine.Types.Time;
 
 namespace agar.io.Objects;
 
-public class Player : IDrawable, IUpdatable
+public class Player : BaseObject, IDrawable, IUpdatable
 {
 	public readonly CircleShape Shape;
 	public readonly bool IsPlayer = false;
@@ -20,6 +20,10 @@ public class Player : IDrawable, IUpdatable
 
 	private float movementSpeed = 200f;
 	public readonly IInput input;
+	
+	public static Player LocalPlayer { get; set; }
+	
+	public float Radius => Shape.Radius;
 
 
 	public Player(Vector2f pos, int radius, IInput input, bool isPlayer = false, Text nickName = null)
@@ -35,6 +39,7 @@ public class Player : IDrawable, IUpdatable
 		{
 			Shape.OutlineColor = Color.Black;
 			Shape.OutlineThickness = 3f;
+			LocalPlayer = this;
 		}
 		
 		
@@ -65,6 +70,24 @@ public class Player : IDrawable, IUpdatable
 		NickNameLabel.SetPosition(new Vector2f(Shape.Position.X, Shape.Position.Y - Shape.Radius - 30));
 		
 		movementSpeed = 200f - (Shape.Radius / 10f);
+		
+		if (this != LocalPlayer)
+		{
+			Shape.OutlineThickness = 3;
+
+			if (Radius > LocalPlayer.Radius)
+			{
+				Shape.OutlineColor = GameConfiguration.darkRed;
+			}
+			else if (Shape.Radius < LocalPlayer.Shape.Radius)
+			{
+				Shape.OutlineColor = GameConfiguration.darkGreen;
+			}
+			else
+			{
+				Shape.OutlineThickness = 0;
+			}
+		}
 	}
 
 	private void UpdateMovement()
@@ -109,5 +132,5 @@ public class Player : IDrawable, IUpdatable
 		Shape.Origin = new Vector2f(Shape.Radius, Shape.Radius);
 		Shape.Radius = MathF.Floor(Shape.Radius);
 	}
-	
+
 }

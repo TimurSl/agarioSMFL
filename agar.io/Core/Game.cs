@@ -1,12 +1,14 @@
 ﻿using agar.io.Core.Types;
+using agar.io.Engine.Config;
+using agar.io.Engine.Interfaces;
 using agar.io.Input;
 using agar.io.Input.Interfaces;
 using agar.io.Objects;
-using agar.io.Objects.Interfaces;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using Text = agar.io.Objects.Text;
+using Time = agar.io.Engine.Types.Time;
 
 namespace agar.io.Core;
 
@@ -27,11 +29,11 @@ public class Game
 	
 	public Game()
 	{
-		VideoMode videoMode = new VideoMode(GameConfiguration.WindowWidth, GameConfiguration.WindowHeight);
+		VideoMode videoMode = new VideoMode(EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight);
 		Window = new RenderWindow(videoMode, "Agar.io Clone", Styles.Titlebar | Styles.Close);
 		Window.SetFramerateLimit(120);
 		
-		camera = new View(new FloatRect(0f, 0f, GameConfiguration.WindowWidth, GameConfiguration.WindowHeight));
+		camera = new View(new FloatRect(0f, 0f, EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight));
 		mainPlayer = players.Find(player => player.IsPlayer);
 	}
 
@@ -67,7 +69,6 @@ public class Game
 
 			for (var pId = 0; pId < players.Count; pId++)
 			{
-				
 				CheckCollisionWithFood(pId);
 
 				CheckCollisionWithPlayer(pId);
@@ -149,43 +150,21 @@ public class Game
 		{
 			drawable.Draw(Window);
 		}
-		
-		// outline players
-		foreach(Player player in players)
-		{
-			if (player.IsPlayer)
-				continue;
-			
-			player.Shape.OutlineThickness = 3;
 
-			if (player.Shape.Radius > mainPlayer.Shape.Radius)
-			{
-				player.Shape.OutlineColor = GameConfiguration.darkRed;
-			}
-			else if (player.Shape.Radius < mainPlayer.Shape.Radius)
-			{
-				player.Shape.OutlineColor = GameConfiguration.darkGreen;
-			}
-			else
-			{
-				player.Shape.OutlineThickness = 0;
-			}
-		}
-		
 		// zoom out if player is too big
-		float zoomFactor = 1f + (mainPlayer.Shape.Radius / GameConfiguration.MaxRadius) * 0.1f;
+		float zoomFactor = 1f + (Player.LocalPlayer.Radius / GameConfiguration.MaxRadiusUntilZoom) * 0.1f;
 
-		if (mainPlayer.Shape.Radius >= GameConfiguration.MaxRadius &&
-		    GameConfiguration.MaxRadius < GameConfiguration.AbsoluteMaxRadius)
+		if (Player.LocalPlayer.Shape.Radius >= GameConfiguration.MaxRadiusUntilZoom &&
+		    GameConfiguration.MaxRadiusUntilZoom < GameConfiguration.AbsoluteMaxRadius)
 		{
-			GameConfiguration.MaxRadius += GameConfiguration.MaxRadiusIncreaseStep;
+			GameConfiguration.MaxRadiusUntilZoom += GameConfiguration.MaxRadiusIncreaseStep;
 			camera.Zoom(zoomFactor);
 		}
 	}
 	
 	private void Update()
 	{
-		Types.Time.Update ();
+		Time.Update ();
 		foreach (IUpdatable updatable in updatables)
 		{
 			updatable.Update();
@@ -245,8 +224,10 @@ public class Game
 
 	private void UpdateCamera()
 	{
-		mainPlayer = players.Find(player => player.IsPlayer) ?? players[0];
-		Vector2f playerPosition = mainPlayer.Position;
+		if (Player.LocalPlayer == null)
+			return;
+		
+		Vector2f playerPosition = Player.LocalPlayer.Position;
 
 		camera.Center = playerPosition;
 	}

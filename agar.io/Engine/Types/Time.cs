@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace agar.io.Core.Types;
+namespace agar.io.Engine.Types;
 
 public static class Time
 {

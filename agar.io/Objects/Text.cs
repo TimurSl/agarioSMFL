@@ -1,10 +1,10 @@
 using agar.io.Core.Types;
-using agar.io.Objects.Interfaces;
+using agar.io.Engine.Interfaces;
 using SFML.System;
 
 namespace agar.io.Objects;
 
-public class Text : IDrawable
+public class Text : IDrawable //! BaseObject
 {
 	public int ZIndex { get; set; } = 3;
 	public SFML.Graphics.Text TextClass;

@@ -1,6 +1,5 @@
-﻿using agar.io.Core.Types;
+﻿using agar.io.Engine.Config;
 using agar.io.Input.Interfaces;
-using agar.io.Objects;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -19,7 +18,7 @@ public class MouseInput : IInput
 	public Vector2f GetDirection(Window window)
 	{
 		Vector2i mousePosition = Mouse.GetPosition(window);
-		Vector2f center = new Vector2f(GameConfiguration.WindowWidth / 2f, GameConfiguration.WindowHeight / 2f);
+		Vector2f center = new Vector2f(EngineConfiguration.WindowWidth / 2f, EngineConfiguration.WindowHeight / 2f);
 		Vector2f mouseOffset = new Vector2f(mousePosition.X - center.X, mousePosition.Y - center.Y);
 		
 		return mouseOffset + camera.Center;

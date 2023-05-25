@@ -1,11 +1,11 @@
 ﻿using agar.io.Core;
-using agar.io.Objects.Interfaces;
+using agar.io.Engine.Interfaces;
 using SFML.Graphics;
 using SFML.System;
 
 namespace agar.io.Objects;
 
-public class Food : IDrawable
+public class Food : BaseObject, IDrawable //! BaseObject
 {
 	public CircleShape shape;
 	public int ZIndex { get; set; } = 0;
