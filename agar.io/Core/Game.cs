@@ -10,19 +10,20 @@ namespace agar.io.Core;
 
 public class Game
 {
-	private Engine.Engine Engine = new Engine.Engine ();
+	private Engine.Engine Engine = new();
 
-	public static Random Random = new Random();
+	public static Random Random = new();
 	
 	public static List<Player> Players = new();
 	public static List<Food> FoodList = new();
 
 	private View camera;
-	
+	private Scoreboard scoreboard = new();
 	
 	public Game()
 	{
 		camera = new View(new FloatRect(0f, 0f, EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight));
+		Engine.RegisterActor(scoreboard);
 	}
 
 	private void Initialize()

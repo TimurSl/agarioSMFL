@@ -20,7 +20,7 @@ public class BotInput : IInput
 			int randomY = Game.Random.Next(0, (int) GameConfiguration.MapHeight);
 
 			targetPosition = new Vector2f(randomX, randomY);
-			waitTime = Game.Random.Next(1, 3);
+			waitTime = Game.Random.Next(1, 10);
 			clock.Restart();
 		}
 

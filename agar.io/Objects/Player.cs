@@ -65,12 +65,6 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 	public void Update()
 	{
-		UpdateMovement();
-
-		NickNameLabel.SetPosition(new Vector2f(Shape.Position.X, Shape.Position.Y - Shape.Radius - 30));
-		
-		movementSpeed = 200f - (Shape.Radius / 10f);
-		
 		if (this != LocalPlayer)
 		{
 			Shape.OutlineThickness = 3;
@@ -88,6 +82,13 @@ public class Player : BaseObject, IDrawable, IUpdatable
 				Shape.OutlineThickness = 0;
 			}
 		}
+		
+		
+		UpdateMovement();
+
+		NickNameLabel.SetPosition(new Vector2f(Shape.Position.X, Shape.Position.Y - Shape.Radius - 30));
+		
+		movementSpeed = 200f - (Shape.Radius / 10f);
 	}
 
 	private void UpdateMovement()

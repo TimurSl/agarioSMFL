@@ -13,7 +13,7 @@ public class Engine
 
 	public static List<IDrawable> drawables = new();
 	public static List<IUpdatable> updatables = new();
-	
+
 	public Action OnFrameStart;
 	public Action OnFrameEnd;
 
