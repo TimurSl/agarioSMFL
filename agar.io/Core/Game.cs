@@ -1,157 +1,176 @@
 ﻿using agar.io.Core.Types;
 using agar.io.Engine.Config;
-using agar.io.Engine.Interfaces;
 using agar.io.Input;
-using agar.io.Input.Interfaces;
 using agar.io.Objects;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
 using Text = agar.io.Objects.Text;
-using Time = agar.io.Engine.Types.Time;
 
 namespace agar.io.Core;
 
 public class Game
 {
-	public static RenderWindow Window;
+	private Engine.Engine Engine = new Engine.Engine ();
+
 	public static Random Random = new Random();
 	
-	private List<IDrawable> drawables = new();
-	private List<IUpdatable> updatables = new();
-	
-	private List<Player> players = new();
-	private List<Food> food = new();
+	public static List<Player> Players = new();
+	public static List<Food> FoodList = new();
 
 	private View camera;
-
-	private Player mainPlayer;
+	
 	
 	public Game()
 	{
-		VideoMode videoMode = new VideoMode(EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight);
-		Window = new RenderWindow(videoMode, "Agar.io Clone", Styles.Titlebar | Styles.Close);
-		Window.SetFramerateLimit(120);
-		
 		camera = new View(new FloatRect(0f, 0f, EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight));
-		mainPlayer = players.Find(player => player.IsPlayer);
 	}
 
 	private void Initialize()
 	{
-		drawables.Clear();
-		updatables.Clear();
-		players.Clear();
-		food.Clear();
+		Players.Clear();
+		FoodList.Clear();
 		
-		CreatePlayer(new MouseInput (camera));
+#pragma warning disable CS8600
+		Player player = Engine.RegisterActor(
+			new Player(RandomMapPosition (), 
+				GameConfiguration.DefaultPlayerRadius, 
+				new MouseInput(camera), 
+				true, 
+				new Text(
+					"Player",
+					20, 
+					Color.White, 
+					new Vector2f(0f, 0f)
+					)
+				)
+			) 
+			as Player;
+
+		Players.Add(player ?? throw new NullReferenceException());
+		
 		for (int i = 0; i < GameConfiguration.MaxBots; i++)
 		{
-			CreatePlayer(new BotInput ());
+			Player bot = Engine.RegisterActor(
+				new Player(
+					RandomMapPosition (),
+					GameConfiguration.DefaultPlayerRadius, 
+					new BotInput(), 
+					false, 
+					new Text(
+						"Bot " + Random.Next(0, 1000).ToString("0000"),
+						20, 
+						Color.White, 
+						new Vector2f(0f, 0f))
+					)
+				) 
+				as Player;
+			
+			
+			Players.Add(bot ?? throw new NullReferenceException());
 		}
 
 		for (int i = 0; i < GameConfiguration.MaxFood; i++)
 		{
-			CreateFood ();
+			Food food = Engine.RegisterActor(new Food(RandomMapPosition ())) as Food;
+
+			FoodList.Add(food ?? throw new NullReferenceException());
 		}
+		
+#pragma warning restore CS8600
+
 	}
 	
 	public void Run()
 	{
 		Initialize ();
-		Window.Closed += (sender, args) => Window.Close();
-		while (Window.IsOpen)
-		{
-			UpdateCamera();
-			
-			Draw();
-			Update();
-
-			for (var pId = 0; pId < players.Count; pId++)
-			{
-				CheckCollisionWithFood(pId);
-
-				CheckCollisionWithPlayer(pId);
-			}
-
-			Window.Display();
-		}
-
+		
+		Engine.OnFrameStart += OnFrameStart;
+		Engine.OnFrameEnd += OnFrameEnd;
+		
+		Engine.Run();
 	}
 
-	private void CheckCollisionWithFood(int playeId)
+	private void OnFrameEnd()
 	{
-		for (var i1 = 0; i1 < food.Count; i1++)
+		for (var pId = 0; pId < Players.Count; pId++)
 		{
-			if (CheckCollision(players[playeId].Shape, food[i1].shape))
+			CheckCollisionWithFood(pId);
+
+			CheckCollisionWithPlayer(pId);
+		}
+	}
+
+	private void OnFrameStart()
+	{
+		io.Engine.Engine.Window.SetView(camera);
+		CheckZoom();
+		UpdateCamera (Player.LocalPlayer);
+	}
+
+	private void CheckCollisionWithFood(int playerId)
+	{
+		for (var foodId = 0; foodId < FoodList.Count; foodId++)
+		{
+			if (CheckCollision(Players[playerId].Shape, FoodList[foodId].shape))
 			{
-				players[playeId].AddMass(1);
+				Players[playerId].AddMass(1);
 
-				DeleteFood(food[i1]);
+				FoodList[foodId].Destroy ();
 
-				CreateFood ();
+				Food? food = Engine.RegisterActor(new Food(RandomMapPosition ())) as Food;
+				
+				FoodList.Add(food ?? throw new NullReferenceException());
 			}
 		}
 	}
 
 	private void CheckCollisionWithPlayer(int playerId)
 	{
-		for (var otherPlayer = 0; otherPlayer < players.Count; otherPlayer++)
+		for (var otherPlayer = 0; otherPlayer < Players.Count; otherPlayer++)
 		{
 			if (otherPlayer == playerId)
 			{
 				continue;
 			}
 
-			if (CheckCollision(players[playerId].Shape, players[otherPlayer].Shape))
+			if (CheckCollision(Players[playerId].Shape, Players[otherPlayer].Shape))
 			{
-				if (players[playerId].Shape.Radius > players[otherPlayer].Shape.Radius)
+				if (Players[playerId].Shape.Radius > Players[otherPlayer].Shape.Radius)
 				{
-					players[playerId].AddMass(players[otherPlayer].Shape.Radius / 2);
+					Players[playerId].AddMass(Players[otherPlayer].Shape.Radius / 2);
 
-					DeletePlayer(players[otherPlayer]);
+					Players[otherPlayer].Destroy ();
 				}
 				else
 				{
-					players[otherPlayer].AddMass(players[playerId].Shape.Radius / 2);
+					Players[otherPlayer].AddMass(Players[playerId].Shape.Radius / 2);
 
-					DeletePlayer(players[playerId]);
+					Players[playerId].Destroy ();
 				}
 				
+				Player? bot = Engine.RegisterActor(
+						new Player(
+							RandomMapPosition (),
+							GameConfiguration.DefaultPlayerRadius, 
+							new BotInput(), 
+							false, 
+							new Text(
+								"Bot " + Random.Next(0, 1000).ToString("0000"),
+								20, 
+								Color.White, 
+								new Vector2f(0f, 0f)
+							)
+						)
+					) 
+					as Player;
 				
-				CreatePlayer(new BotInput ());
+				Players.Add(bot ?? throw new NullReferenceException());
 			}
 		}
 	}
 
-	private void RegisterActor(IDrawable? drawable = null, IUpdatable? updatable = null)
+	private void CheckZoom()
 	{
-		if (drawable != null && !drawables.Contains(drawable))
-		{
-			drawables.Add(drawable);
-		}
-		
-		if (updatable != null && !updatables.Contains(updatable))
-		{
-			updatables.Add(updatable);
-		}
-	}
-	
-	private void Draw()
-	{
-		Window.DispatchEvents();
-		Window.Clear(Color.White);
-		Window.SetView(camera);
-
-		// sort drawables by z-index, so that the ones with the highest z-index are drawn last
-		drawables.Sort((drawable, drawable1) => drawable.ZIndex.CompareTo(drawable1.ZIndex));
-		
-		foreach (IDrawable drawable in drawables)
-		{
-			drawable.Draw(Window);
-		}
-
-		// zoom out if player is too big
 		float zoomFactor = 1f + (Player.LocalPlayer.Radius / GameConfiguration.MaxRadiusUntilZoom) * 0.1f;
 
 		if (Player.LocalPlayer.Shape.Radius >= GameConfiguration.MaxRadiusUntilZoom &&
@@ -162,40 +181,6 @@ public class Game
 		}
 	}
 	
-	private void Update()
-	{
-		Time.Update ();
-		foreach (IUpdatable updatable in updatables)
-		{
-			updatable.Update();
-		}
-	}
-	
-	private void CreatePlayer(IInput input)
-	{
-		string name = $"Player {Random.Next(1000).ToString("0000")}";
-		if (input is BotInput)
-		{
-			name = $"Bot {Random.Next(1000).ToString("0000")}";
-		}
-		
-		Text text = new Text(name, 20, Color.White, new Vector2f(0, 0));
-		RegisterActor(text);
-		
-		Vector2f position = new Vector2f(Random.Next(0, (int) GameConfiguration.MapWidth), Random.Next(0, (int) GameConfiguration.MapHeight));
-		Player player = new Player(position, GameConfiguration.DefaultPlayerRadius, input, input is MouseInput, text);
-		
-		RegisterActor(player, player);
-		players.Add(player);
-	}
-
-	private void CreateFood()
-	{
-		Food food = new Food(new Vector2f((float) Random.NextDouble () * GameConfiguration.MapWidth,
-			(float) Random.NextDouble () * GameConfiguration.MapHeight));
-		RegisterActor(food);
-		this.food.Add(food);
-	}
 	
 	private bool CheckCollision(Shape shape1, Shape shape2)
 	{
@@ -204,32 +189,18 @@ public class Game
 		
 		return rect1.Intersects(rect2);
 	}
-	
-	private void DeleteFood(Food food)
-	{
-		drawables.Remove(food);
-		this.food.Remove(food);
-	}
-	
-	private void DeletePlayer(Player player)
-	{
-		Console.WriteLine($"Player {player.NickName} died");
-		drawables.Remove(player);
-		drawables.Remove(player.NickNameLabel);
-		
-		players.Remove(player);
-		
-		player = null;
-	}
 
-	private void UpdateCamera()
+
+	private void UpdateCamera(Player player)
 	{
-		if (Player.LocalPlayer == null)
-			return;
-		
-		Vector2f playerPosition = Player.LocalPlayer.Position;
+		Vector2f playerPosition = player.Position;
 
 		camera.Center = playerPosition;
+	}
+	
+	private Vector2f RandomMapPosition()
+	{
+		return new Vector2f(Random.Next(0, GameConfiguration.MapWidth), Random.Next(0, GameConfiguration.MapHeight));
 	}
 	
 }

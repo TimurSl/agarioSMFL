@@ -1,9 +1,11 @@
 ﻿using agar.io.Core;
 using agar.io.Core.Types;
 using agar.io.Engine.Interfaces;
+using agar.io.Input;
 using agar.io.Input.Interfaces;
 using SFML.Graphics;
 using SFML.System;
+using SFML.Window;
 using Time = agar.io.Engine.Types.Time;
 
 namespace agar.io.Objects;
@@ -24,6 +26,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	public static Player LocalPlayer { get; set; }
 	
 	public float Radius => Shape.Radius;
+	public new bool IsInitialized { get; set; }
 
 
 	public Player(Vector2f pos, int radius, IInput input, bool isPlayer = false, Text nickName = null)
@@ -48,12 +51,8 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		this.IsPlayer = isPlayer;
 		this.NickNameLabel = nickName;
 		this.NickName = nickName?.GetMessage () ?? "Player";
-	}
-	
-	~Player()
-	{
-		Shape.Dispose();
-		NickNameLabel.TextClass.Dispose ();
+		
+		IsInitialized = true;
 	}
 
 
@@ -62,6 +61,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		target.Draw(Shape);
 		NickNameLabel.Draw(target);
 	}
+
 
 	public void Update()
 	{
@@ -92,9 +92,9 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 	private void UpdateMovement()
 	{
-		Vector2f targetPosition = input.GetDirection(Game.Window);
+		Vector2f targetPosition = input.GetDirection(Engine.Engine.Window);
 		Vector2f direction = targetPosition - Shape.Position;
-
+		
 		if (direction != new Vector2f(0, 0))
 		{
 			float magnitude = MathF.Sqrt((direction.X * direction.X) + (direction.Y * direction.Y));
@@ -131,6 +131,20 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		
 		Shape.Origin = new Vector2f(Shape.Radius, Shape.Radius);
 		Shape.Radius = MathF.Floor(Shape.Radius);
+	}
+	
+	public new void Destroy()
+	{
+		base.Destroy();
+		
+		if (this == LocalPlayer)
+		{
+			Console.WriteLine("You died!");
+		}
+		
+		Console.WriteLine($"Player {NickName} died!");
+		
+		Game.Players.Remove(this);
 	}
 
 }

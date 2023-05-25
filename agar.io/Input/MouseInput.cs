@@ -20,7 +20,7 @@ public class MouseInput : IInput
 		Vector2i mousePosition = Mouse.GetPosition(window);
 		Vector2f center = new Vector2f(EngineConfiguration.WindowWidth / 2f, EngineConfiguration.WindowHeight / 2f);
 		Vector2f mouseOffset = new Vector2f(mousePosition.X - center.X, mousePosition.Y - center.Y);
-		
+
 		return mouseOffset + camera.Center;
 	}
 }

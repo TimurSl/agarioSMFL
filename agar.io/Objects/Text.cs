@@ -4,9 +4,9 @@ using SFML.System;
 
 namespace agar.io.Objects;
 
-public class Text : IDrawable //! BaseObject
+public class Text : IDrawable
 {
-	public int ZIndex { get; set; } = 3;
+	public int ZIndex { get; set; } = 999;
 	public SFML.Graphics.Text TextClass;
 	
 	public Text(string message, uint size, SFML.Graphics.Color color, Vector2f position)

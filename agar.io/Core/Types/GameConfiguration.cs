@@ -12,8 +12,8 @@ public static class GameConfiguration
 	public const int WindowWidth = 1280;
 	public const int WindowHeight = 720;
 
-	public const float MapWidth = 5000f;
-	public const float MapHeight = 5000f;
+	public const int MapWidth = 5000;
+	public const int MapHeight = 5000;
 
 	public const int MaxBots = 20;
 	public const int MaxFood = 800;

@@ -5,7 +5,7 @@ using SFML.System;
 
 namespace agar.io.Objects;
 
-public class Food : BaseObject, IDrawable //! BaseObject
+public class Food : BaseObject, IDrawable 
 {
 	public CircleShape shape;
 	public int ZIndex { get; set; } = 0;
@@ -21,10 +21,18 @@ public class Food : BaseObject, IDrawable //! BaseObject
 		shape.Position = position;
 		shape.Origin = new Vector2f(radius, radius);
 		shape.FillColor = randomColor;
+		
+		IsInitialized = true;
 	}
 
 	public void Draw(RenderTarget target)
 	{
 		target.Draw(shape);
+	}
+
+	public new void Destroy()
+	{
+		base.Destroy();
+		Game.FoodList.Remove(this);
 	}
 }
