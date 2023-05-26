@@ -9,17 +9,17 @@ namespace agar.io.Engine;
 public class Engine
 {
 	public static RenderWindow Window;
-
+	
 	public static List<IDrawable> drawables = new();
 	public static List<IUpdatable> updatables = new();
-
+	
 	public Action OnFrameStart;
 	public Action OnFrameEnd;
 
 	public Engine()
 	{
 		VideoMode videoMode = new VideoMode(EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight);
-		Window = new RenderWindow(videoMode, "Agar.io Clone", Styles.Titlebar | Styles.Close);
+		Window = new RenderWindow(videoMode, EngineConfiguration.WindowTitle, Styles.Titlebar | Styles.Close);
 		Window.SetFramerateLimit(EngineConfiguration.FrameRateLimit);
 	}
 	
@@ -43,7 +43,10 @@ public class Engine
 		}
 	}
 
-	internal void Draw()
+	/// <summary>
+	/// Draws all the objects in the game
+	/// </summary>
+	private void Draw()
 	{
 		Window.DispatchEvents();
 		Window.Clear(Color.White);
@@ -61,7 +64,10 @@ public class Engine
 		}
 	}
 	
-	internal void Update()
+	/// <summary>
+	/// Updates all the objects in the game
+	/// </summary>
+	private void Update()
 	{
 		Time.Update ();
 		
@@ -76,6 +82,11 @@ public class Engine
 		}
 	}
 	
+	/// <summary>
+	/// Registers an actor to the game, adds him to lists and sets IsInitialized to true
+	/// </summary>
+	/// <param name="actor">The object that must be initialized</param>
+	/// <returns>The object that successfully initialized</returns>
 	public BaseObject RegisterActor(BaseObject actor)
 	{
 		if (actor is IUpdatable updatable)
@@ -93,6 +104,9 @@ public class Engine
 		return actor;
 	}
 
+	/// <summary>
+	/// Clears all the objects in the game
+	/// </summary>
 	public void DestroyAll()
 	{
 		List<BaseObject> objects = new();
@@ -115,6 +129,7 @@ public class Engine
 		
 		foreach (BaseObject baseObject in objects)
 		{
+			baseObject.IsInitialized = false;
 			baseObject.Destroy();
 		}
 	}

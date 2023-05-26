@@ -62,7 +62,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		NickNameLabel.Draw(target);
 	}
 
-
+	
 	public void Update()
 	{
 		if (this != LocalPlayer)
@@ -91,6 +91,9 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		movementSpeed = 200f - (Shape.Radius / 10f);
 	}
 
+	/// <summary>
+	/// Updates the movement of the player.
+	/// </summary>
 	private void UpdateMovement()
 	{
 		Vector2f targetPosition = input.GetDirection(Engine.Engine.Window);
@@ -109,6 +112,9 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		Shape.Position = Position;
 	}
 
+	/// <summary>
+	/// Clamps the movement of the player.
+	/// </summary>
 	private void ClampMovement()
 	{
 		if (Position.X < Shape.Radius)
@@ -122,6 +128,10 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			Position.Y = GameConfiguration.MapWidth - Shape.Radius;
 	}
 	
+	/// <summary>
+	/// Adds mass to the player. Radius is increased by the mass.
+	/// </summary>
+	/// <param name="mass">The amount of mass</param>
 	public void AddMass(float mass)
 	{
 		if (Shape.Radius + mass > GameConfiguration.AbsoluteMaxRadius)
@@ -134,6 +144,9 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		Shape.Radius = MathF.Floor(Shape.Radius);
 	}
 	
+	/// <summary>
+	/// Destroys the player. Removes it from the game.
+	/// </summary>
 	public new void Destroy()
 	{
 		base.Destroy();

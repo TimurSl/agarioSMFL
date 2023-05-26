@@ -29,10 +29,15 @@ public class Game
 		Engine.RegisterActor(scoreboard);
 	}
 
+	/// <summary>
+	/// Initializes the game, clears the player list and food list and adds a new player and bots
+	/// </summary>
+	/// <exception cref="NullReferenceException"></exception>
 	private void Initialize()
 	{
 		Players.Clear();
 		FoodList.Clear();
+		Engine.DestroyAll ();
 		
 #pragma warning disable CS8600
 		Player player = Engine.RegisterActor(
@@ -84,6 +89,9 @@ public class Game
 
 	}
 	
+	/// <summary>
+	/// Runs the game
+	/// </summary>
 	public void Run()
 	{
 		Initialize ();
@@ -94,6 +102,10 @@ public class Game
 		Engine.Run();
 	}
 
+	/// <summary>
+	/// Called when frame ends to render
+	/// </summary>
+	/// <exception cref="NullReferenceException"></exception>
 	private void OnFrameEnd()
 	{
 		for (var pId = 0; pId < Players.Count; pId++)
@@ -102,16 +114,24 @@ public class Game
 
 			CheckCollisionWithPlayer(pId);
 		}
-		UpdateCamera (Player.LocalPlayer);
+		UpdateCamera (Player.LocalPlayer ?? Players[0] ?? throw new NullReferenceException());
 
 	}
 
+	/// <summary>
+	/// Called when frame starts to render
+	/// </summary>
 	private void OnFrameStart()
 	{
 		io.Engine.Engine.Window.SetView(Camera);
 		CheckZoom();
 	}
 
+	/// <summary>
+	/// Check if player collided with food
+	/// </summary>
+	/// <param name="playerId">ID of player in Players list</param>
+	/// <exception cref="NullReferenceException"></exception>
 	private void CheckCollisionWithFood(int playerId)
 	{
 		for (var foodId = 0; foodId < FoodList.Count; foodId++)
@@ -128,7 +148,13 @@ public class Game
 			}
 		}
 	}
-
+	
+	
+	/// <summary>
+	/// Check if player collided with other player
+	/// </summary>
+	/// <param name="playerId">ID of player in Players list</param>
+	/// <exception cref="NullReferenceException"></exception>
 	private void CheckCollisionWithPlayer(int playerId)
 	{
 		for (var otherPlayer = 0; otherPlayer < Players.Count; otherPlayer++)
@@ -174,11 +200,14 @@ public class Game
 		}
 	}
 
+	/// <summary>
+	/// Checking player radius and zooming out if needed
+	/// </summary>
 	private void CheckZoom()
 	{
 		float zoomFactor = 1f + (Player.LocalPlayer.Radius / GameConfiguration.MaxRadiusUntilZoom) * 0.1f;
 
-		if (Player.LocalPlayer.Shape.Radius >= GameConfiguration.MaxRadiusUntilZoom &&
+		if (Player.LocalPlayer.Radius >= GameConfiguration.MaxRadiusUntilZoom &&
 		    GameConfiguration.MaxRadiusUntilZoom < GameConfiguration.AbsoluteMaxRadius)
 		{
 			GameConfiguration.MaxRadiusUntilZoom += GameConfiguration.MaxRadiusIncreaseStep;
@@ -188,6 +217,12 @@ public class Game
 	}
 	
 	
+	/// <summary>
+	/// Checks if two shapes are colliding
+	/// </summary>
+	/// <param name="shape1"></param>
+	/// <param name="shape2"></param>
+	/// <returns>The collision check</returns>
 	private bool CheckCollision(Shape shape1, Shape shape2)
 	{
 		FloatRect rect1 = shape1.GetGlobalBounds();
@@ -197,6 +232,10 @@ public class Game
 	}
 
 
+	/// <summary>
+	/// Updates the camera position to the player position
+	/// </summary>
+	/// <param name="player">The target player for Camera</param>
 	private void UpdateCamera(Player player)
 	{
 		Vector2f playerPosition = player.Position;
@@ -204,14 +243,22 @@ public class Game
 		Camera.Center = playerPosition;
 	}
 	
+	/// <summary>
+	/// Returns a random position on the map
+	/// </summary>
+	/// <returns>A random position on Map</returns>
 	private Vector2f RandomMapPosition()
 	{
 		return new Vector2f(Random.Next(0, GameConfiguration.MapWidth), Random.Next(0, GameConfiguration.MapHeight));
 	}
 
+	/// <summary>
+	/// Returns the left top corner of the camera, can be used in UI
+	/// </summary>
+	/// <returns>The position of left-top corner of camera</returns>
 	public static Vector2f GetLeftTopCorner()
 	{
 		return new Vector2f(Camera.Center.X - Camera.Size.X / 2, Camera.Center.Y - Camera.Size.Y / 2);
 	}
-	
+
 }
