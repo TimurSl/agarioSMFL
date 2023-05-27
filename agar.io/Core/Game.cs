@@ -26,7 +26,6 @@ public class Game
 	public Game()
 	{
 		Camera = new View(new FloatRect(0f, 0f, EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight));
-		Engine.RegisterActor(scoreboard);
 	}
 
 	/// <summary>
@@ -35,10 +34,10 @@ public class Game
 	/// <exception cref="NullReferenceException"></exception>
 	private void Initialize()
 	{
+		Engine.DestroyAll ();
 		Players.Clear();
 		FoodList.Clear();
-		Engine.DestroyAll ();
-		
+
 #pragma warning disable CS8600
 		Player player = Engine.RegisterActor(
 			new Player(RandomMapPosition (), 
@@ -86,12 +85,12 @@ public class Game
 		}
 		
 #pragma warning restore CS8600
+		
+		Engine.RegisterActor(scoreboard);
+
 
 	}
 	
-	/// <summary>
-	/// Runs the game
-	/// </summary>
 	public void Run()
 	{
 		Initialize ();
@@ -101,11 +100,7 @@ public class Game
 		
 		Engine.Run();
 	}
-
-	/// <summary>
-	/// Called when frame ends to render
-	/// </summary>
-	/// <exception cref="NullReferenceException"></exception>
+	
 	private void OnFrameEnd()
 	{
 		for (var pId = 0; pId < Players.Count; pId++)
@@ -117,10 +112,6 @@ public class Game
 		UpdateCamera (Player.LocalPlayer ?? Players[0] ?? throw new NullReferenceException());
 
 	}
-
-	/// <summary>
-	/// Called when frame starts to render
-	/// </summary>
 	private void OnFrameStart()
 	{
 		io.Engine.Engine.Window.SetView(Camera);
