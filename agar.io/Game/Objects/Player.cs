@@ -163,17 +163,13 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			newPlayer = Core.Game.Players[Core.Game.Random.Next(0, Core.Game.Players.Count)];
 		}
 
-		(oldPlayer.Shape.Position, newPlayer.Shape.Position) = (newPlayer.Shape.Position, oldPlayer.Shape.Position);
-		(oldPlayer.Radius, newPlayer.Radius) = (newPlayer.Radius, oldPlayer.Radius);
-		(oldPlayer.Shape.FillColor, newPlayer.Shape.FillColor) = (newPlayer.Shape.FillColor, oldPlayer.Shape.FillColor);
-		(oldPlayer.input, newPlayer.input) = (newPlayer.input, oldPlayer.input);
-		
-		oldPlayer.Shape.Origin = new Vector2f(oldPlayer.Shape.Radius, oldPlayer.Shape.Radius);
-		newPlayer.Shape.Origin = new Vector2f(newPlayer.Shape.Radius, newPlayer.Shape.Radius);
-		
 		oldPlayer.IsPlayer = false;
 		newPlayer.IsPlayer = true;
 		
+		(oldPlayer.input, newPlayer.input) = (newPlayer.input, oldPlayer.input);
+		newPlayer.Shape.OutlineThickness = 0;
+		
+		LocalPlayer = newPlayer;
 	}
 
 	/// <summary>
