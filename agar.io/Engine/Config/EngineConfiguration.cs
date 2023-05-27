@@ -28,9 +28,4 @@ public class EngineConfiguration
 	/// The background color of the window
 	/// </summary>
 	public static Color BackgroundColor = new Color(255, 255, 255);
-	
-	/// <summary>
-	/// The font of the game
-	/// </summary>
-	public static Font Font = new Font(Path.Combine(Directory.GetCurrentDirectory (), "Fonts", "arial.ttf"));
 }

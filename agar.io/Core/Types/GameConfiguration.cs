@@ -9,9 +9,6 @@ public static class GameConfiguration
 	public static float MaxRadiusIncreaseStep = 70f;
 	public static float AbsoluteMaxRadius = 1000f;
 
-	public const int WindowWidth = 1280;
-	public const int WindowHeight = 720;
-
 	public const int MapWidth = 5000;
 	public const int MapHeight = 5000;
 
