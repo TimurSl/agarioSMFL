@@ -1,10 +1,10 @@
 ﻿using agar.io.Engine.Config;
-using agar.io.Input.Interfaces;
+using agar.io.Game.Input.Interfaces;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace agar.io.Input;
+namespace agar.io.Game.Input;
 
 public class MouseInput : IInput
 {

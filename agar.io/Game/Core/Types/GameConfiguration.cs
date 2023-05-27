@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 
-namespace agar.io.Core.Types;
+namespace agar.io.Game.Core.Types;
 
 public static class GameConfiguration
 {

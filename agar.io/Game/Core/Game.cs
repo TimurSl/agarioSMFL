@@ -1,13 +1,12 @@
-﻿using agar.io.Core.Types;
-using agar.io.Engine.Config;
-using agar.io.Input;
-using agar.io.Objects;
+﻿using agar.io.Engine.Config;
+using agar.io.Game.Core.Types;
+using agar.io.Game.Input;
+using agar.io.Game.Objects;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
-using Text = agar.io.Objects.Text;
+using Text = agar.io.Game.Objects.Text;
 
-namespace agar.io.Core;
+namespace agar.io.Game.Core;
 
 public class Game
 {

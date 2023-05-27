@@ -1,10 +1,8 @@
-using System.Diagnostics;
-using agar.io.Core;
 using agar.io.Engine.Interfaces;
 using SFML.Graphics;
 using SFML.System;
 
-namespace agar.io.Objects;
+namespace agar.io.Game.Objects;
 
 public class Scoreboard : BaseObject, IDrawable, IUpdatable
 {
@@ -18,10 +16,10 @@ public class Scoreboard : BaseObject, IDrawable, IUpdatable
 	
 	public void Draw(RenderTarget target)
 	{
-		if (Game.Camera != null)
+		if (Core.Game.Camera != null)
 		{
-			text.TextClass.Position = Game.GetLeftTopCorner () + new Vector2f(70, 30) * Game.CurrentCameraZoom;
-			text.TextClass.Scale = new Vector2f(1 * Game.CurrentCameraZoom, 1 * Game.CurrentCameraZoom);
+			text.TextClass.Position = Core.Game.GetLeftTopCorner () + new Vector2f(70, 30) * Core.Game.CurrentCameraZoom;
+			text.TextClass.Scale = new Vector2f(1 * Core.Game.CurrentCameraZoom, 1 * Core.Game.CurrentCameraZoom);
 		}
 		
 		text.Draw(target);
@@ -29,7 +27,7 @@ public class Scoreboard : BaseObject, IDrawable, IUpdatable
 
 	public void Update()
 	{
-		var players = Game.Players;
+		var players = Core.Game.Players;
 		players.Sort((x, y) => y.Radius.CompareTo(x.Radius));
 
 		if (players.Count > 10)

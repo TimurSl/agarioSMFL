@@ -1,10 +1,9 @@
-﻿using agar.io.Core;
-using agar.io.Core.Types;
-using agar.io.Input.Interfaces;
+﻿using agar.io.Game.Core.Types;
+using agar.io.Game.Input.Interfaces;
 using SFML.System;
 using SFML.Window;
 
-namespace agar.io.Input;
+namespace agar.io.Game.Input;
 
 public class BotInput : IInput
 {
@@ -16,11 +15,11 @@ public class BotInput : IInput
 	{
 		if (clock.ElapsedTime.AsSeconds() >= waitTime)
 		{
-			int randomX = Game.Random.Next(0, (int) GameConfiguration.MapWidth);
-			int randomY = Game.Random.Next(0, (int) GameConfiguration.MapHeight);
+			int randomX = Core.Game.Random.Next(0, (int) GameConfiguration.MapWidth);
+			int randomY = Core.Game.Random.Next(0, (int) GameConfiguration.MapHeight);
 
 			targetPosition = new Vector2f(randomX, randomY);
-			waitTime = Game.Random.Next(1, 10);
+			waitTime = Core.Game.Random.Next(1, 10);
 			clock.Restart();
 		}
 

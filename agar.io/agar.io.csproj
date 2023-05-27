@@ -14,9 +14,14 @@
 
     <ItemGroup>
       <None Remove="Fonts\arial.ttf" />
-      <EmbeddedResource Include="Fonts\arial.ttf">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Game\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Game\Fonts\arial.ttf" />
     </ItemGroup>
 
 </Project>

@@ -1,8 +1,8 @@
-using agar.io.Core.Types;
 using agar.io.Engine.Interfaces;
+using agar.io.Game.Core.Types;
 using SFML.System;
 
-namespace agar.io.Objects;
+namespace agar.io.Game.Objects;
 
 public class Text : IDrawable
 {

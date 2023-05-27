@@ -1,9 +1,8 @@
-﻿using agar.io.Core;
-using agar.io.Engine.Interfaces;
+﻿using agar.io.Engine.Interfaces;
 using SFML.Graphics;
 using SFML.System;
 
-namespace agar.io.Objects;
+namespace agar.io.Game.Objects;
 
 public class Food : BaseObject, IDrawable 
 {
@@ -15,7 +14,7 @@ public class Food : BaseObject, IDrawable
 
 	public Food(Vector2f position)
 	{
-		Color randomColor = new Color((byte)Game.Random.Next(0, 255), (byte)Game.Random.Next(0, 255), (byte)Game.Random.Next(0, 255));
+		Color randomColor = new Color((byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255));
 
 		shape = new CircleShape(radius);
 		shape.Position = position;
@@ -33,6 +32,6 @@ public class Food : BaseObject, IDrawable
 	public new void Destroy()
 	{
 		base.Destroy();
-		Game.FoodList.Remove(this);
+		Core.Game.FoodList.Remove(this);
 	}
 }

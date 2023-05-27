@@ -1,14 +1,11 @@
-﻿using agar.io.Core;
-using agar.io.Core.Types;
-using agar.io.Engine.Interfaces;
-using agar.io.Input;
-using agar.io.Input.Interfaces;
+﻿using agar.io.Engine.Interfaces;
+using agar.io.Game.Core.Types;
+using agar.io.Game.Input.Interfaces;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
 using Time = agar.io.Engine.Types.Time;
 
-namespace agar.io.Objects;
+namespace agar.io.Game.Objects;
 
 public class Player : BaseObject, IDrawable, IUpdatable
 {
@@ -31,7 +28,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 	public Player(Vector2f pos, int radius, IInput input, bool isPlayer = false, Text nickName = null)
 	{
-		Color randomColor = new Color((byte)Game.Random.Next(0, 255), (byte)Game.Random.Next(0, 255), (byte)Game.Random.Next(0, 255));
+		Color randomColor = new Color((byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255));
 
 		Shape = new CircleShape(radius);
 		Shape.Position = pos;
@@ -158,7 +155,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		
 		Console.WriteLine($"Player {NickName} died!");
 		
-		Game.Players.Remove(this);
+		Core.Game.Players.Remove(this);
 	}
 
 }
