@@ -15,7 +15,7 @@ public static class GameConfiguration
 	public const int MaxBots = 20;
 	public const int MaxFood = 800;
 	
-	public static Font Font = new Font(Path.Combine(Directory.GetCurrentDirectory (), "Fonts", "arial.ttf"));
+	public static Font Font = new Font(Path.Combine(Directory.GetCurrentDirectory (), "Fonts", "Pusia.otf"));
 	
 	public static Color darkGreen = new Color(0, 255, 0);
 	public static Color darkRed = new Color(255, 0, 0);

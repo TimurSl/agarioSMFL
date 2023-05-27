@@ -14,14 +14,20 @@
 
     <ItemGroup>
       <None Remove="Fonts\arial.ttf" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Game\" />
+      <None Remove="Game\Fonts\**" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Include="Game\Fonts\arial.ttf" />
+      <None Remove="Fonts\Pusia.otf" />
+      <EmbeddedResource Include="Fonts\Pusia.otf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Remove="Game\Fonts\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Game\Fonts\**" />
     </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ using agar.io.Game.Core.Types;
 using agar.io.Game.Input.Interfaces;
 using SFML.Graphics;
 using SFML.System;
+using SFML.Window;
 using Time = agar.io.Engine.Types.Time;
 
 namespace agar.io.Game.Objects;
@@ -10,7 +11,7 @@ namespace agar.io.Game.Objects;
 public class Player : BaseObject, IDrawable, IUpdatable
 {
 	public readonly CircleShape Shape;
-	public readonly bool IsPlayer = false;
+	public bool IsPlayer = false;
 	public Vector2f Position;
 	public readonly Text NickNameLabel;
 	public readonly string NickName = "Player";
@@ -18,11 +19,16 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	public int ZIndex { get; set; } = 1;
 
 	private float movementSpeed = 200f;
-	public readonly IInput input;
+	public IInput input;
 	
 	public static Player LocalPlayer { get; set; }
 	
-	public float Radius => Shape.Radius;
+	public float Radius
+	{
+		get => Shape.Radius;
+		set => Shape.Radius = value;
+	}
+
 	public new bool IsInitialized { get; set; }
 
 
@@ -79,7 +85,13 @@ public class Player : BaseObject, IDrawable, IUpdatable
 				Shape.OutlineThickness = 0;
 			}
 		}
-		
+		else
+		{
+			if (Keyboard.IsKeyPressed(Keyboard.Key.R))
+			{
+				ChangeSoul ();
+			}
+		}
 		
 		UpdateMovement();
 
@@ -124,7 +136,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		else if (Position.Y > GameConfiguration.MapWidth - Shape.Radius)
 			Position.Y = GameConfiguration.MapWidth - Shape.Radius;
 	}
-	
+
 	/// <summary>
 	/// Adds mass to the player. Radius is increased by the mass.
 	/// </summary>
@@ -140,7 +152,30 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		Shape.Origin = new Vector2f(Shape.Radius, Shape.Radius);
 		Shape.Radius = MathF.Floor(Shape.Radius);
 	}
-	
+
+	private void ChangeSoul()
+	{
+		Player oldPlayer = this;
+		Player newPlayer = Core.Game.Players[Core.Game.Random.Next(0, Core.Game.Players.Count)];
+
+		while (newPlayer == oldPlayer)
+		{
+			newPlayer = Core.Game.Players[Core.Game.Random.Next(0, Core.Game.Players.Count)];
+		}
+
+		(oldPlayer.Shape.Position, newPlayer.Shape.Position) = (newPlayer.Shape.Position, oldPlayer.Shape.Position);
+		(oldPlayer.Radius, newPlayer.Radius) = (newPlayer.Radius, oldPlayer.Radius);
+		(oldPlayer.Shape.FillColor, newPlayer.Shape.FillColor) = (newPlayer.Shape.FillColor, oldPlayer.Shape.FillColor);
+		(oldPlayer.input, newPlayer.input) = (newPlayer.input, oldPlayer.input);
+		
+		oldPlayer.Shape.Origin = new Vector2f(oldPlayer.Shape.Radius, oldPlayer.Shape.Radius);
+		newPlayer.Shape.Origin = new Vector2f(newPlayer.Shape.Radius, newPlayer.Shape.Radius);
+		
+		oldPlayer.IsPlayer = false;
+		newPlayer.IsPlayer = true;
+		
+	}
+
 	/// <summary>
 	/// Destroys the player. Removes it from the game.
 	/// </summary>
@@ -150,7 +185,8 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		
 		if (this == LocalPlayer)
 		{
-			Console.WriteLine("You died!");
+			ChangeSoul ();
+			return;
 		}
 		
 		Console.WriteLine($"Player {NickName} died!");
