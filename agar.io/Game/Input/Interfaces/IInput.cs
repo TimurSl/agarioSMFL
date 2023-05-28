@@ -6,4 +6,5 @@ namespace agar.io.Game.Input.Interfaces;
 public interface IInput
 {
 	public Vector2f GetDirection(Window window);
+	public void HandleInput(Window window);
 }

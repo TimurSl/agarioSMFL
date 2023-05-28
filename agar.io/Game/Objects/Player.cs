@@ -36,31 +36,6 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	private Stopwatch stopwatch = new Stopwatch();
 	private float cooldown = 1f;
 
-
-	public Player(Vector2f pos, int radius, IInput input, bool isPlayer = false, Text nickName = null)
-	{
-		Color randomColor = new Color((byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255));
-
-		Shape = new CircleShape(radius);
-		Shape.Position = pos;
-		Shape.FillColor = randomColor;
-		Shape.Origin = new Vector2f(radius, radius);
-
-		if (isPlayer)
-		{
-			Shape.OutlineColor = Color.Black;
-			Shape.OutlineThickness = 3f;
-			LocalPlayer = this;
-		}
-		
-		
-		this.Position = pos;
-		this.input = input;
-		this.IsPlayer = isPlayer;
-		this.NickNameLabel = nickName;
-		this.NickName = nickName?.GetMessage () ?? "Player";
-	}
-
 	public Player(IInput input, string nickName)
 	{
 		Color randomColor = new Color((byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255));
@@ -71,7 +46,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		Shape.FillColor = randomColor;
 		Shape.Origin = new Vector2f(GameConfiguration.DefaultPlayerRadius, GameConfiguration.DefaultPlayerRadius);
 
-		if (input is MouseInput)
+		if (input is PlayerInput)
 		{
 			Shape.OutlineColor = Color.Black;
 			Shape.OutlineThickness = 3f;
@@ -79,12 +54,15 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		}
 
 		this.input = input;
-		this.IsPlayer = this.input is MouseInput;
+		
+		BindKeys ();
+
+		this.IsPlayer = this.input is PlayerInput;
 		this.NickNameLabel = new Text(nickName, 20, Color.White, new Vector2f(0, 0));
 		this.NickName = nickName;
+		
+		stopwatch.Start();
 	}
-	
-
 
 	public void Draw(RenderTarget target)
 	{
@@ -92,9 +70,11 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		NickNameLabel.Draw(target);
 	}
 
-	
+
 	public void Update()
 	{
+		input.HandleInput(Engine.Engine.Window);
+		
 		if (this != LocalPlayer)
 		{
 			Shape.OutlineThickness = 3;
@@ -112,18 +92,8 @@ public class Player : BaseObject, IDrawable, IUpdatable
 				Shape.OutlineThickness = 0;
 			}
 		}
-		else
-		{
-			if (Keyboard.IsKeyPressed(Keyboard.Key.R))
-			{
-				if (!stopwatch.IsRunning || stopwatch.Elapsed.TotalSeconds >= cooldown)
-				{
-					stopwatch.Restart();
-					ChangeSoul();
-				}
-			}
-		}
 		
+
 		UpdateMovement();
 
 		NickNameLabel.SetPosition(new Vector2f(Shape.Position.X, Shape.Position.Y - Shape.Radius - 30));
@@ -196,9 +166,12 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 		oldPlayer.IsPlayer = false;
 		newPlayer.IsPlayer = true;
+
+		oldPlayer.input = new BotInput ();
+		newPlayer.input = new PlayerInput (Game.Core.Game.Camera);
 		
-		(oldPlayer.input, newPlayer.input) = (newPlayer.input, oldPlayer.input);
-		
+		newPlayer.BindKeys ();
+
 		// update outline
 		newPlayer.Shape.OutlineColor = Color.Black;
 		newPlayer.Shape.OutlineThickness = 3f;
@@ -223,6 +196,14 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		Console.WriteLine($"Player {NickName} died!");
 		
 		Core.Game.Players.Remove(this);
+	}
+
+	private void BindKeys()
+	{
+		if (input is PlayerInput playerInput)
+		{
+			playerInput.BindKey(Keyboard.Key.R, ChangeSoul);
+		}
 	}
 
 }

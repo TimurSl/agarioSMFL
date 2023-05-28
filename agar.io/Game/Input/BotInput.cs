@@ -25,4 +25,14 @@ public class BotInput : IInput
 
 		return targetPosition;
 	}
+
+	public void HandleInput(Window window)
+	{
+		// Do nothing
+	}
+
+	public void BindKey(Keyboard.Key key, Action action)
+	{
+		// Do nothing
+	}
 }

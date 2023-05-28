@@ -38,51 +38,31 @@ public class Game
 		FoodList.Clear();
 
 #pragma warning disable CS8600
-		Player player = Engine.RegisterActor(
-			new Player(RandomMapPosition (), 
-				GameConfiguration.DefaultPlayerRadius, 
-				new MouseInput(Camera), 
-				true, 
-				new Text(
-					"Player",
-					20, 
-					Color.White, 
-					new Vector2f(0f, 0f)
-					)
-				)
-			) 
-			as Player;
-
-		Players.Add(player ?? throw new NullReferenceException());
-		
-		for (int i = 0; i < GameConfiguration.MaxBots; i++)
+		try
 		{
-			Player bot = Engine.RegisterActor(
-				new Player(
-					RandomMapPosition (),
-					GameConfiguration.DefaultPlayerRadius, 
-					new BotInput(), 
-					false, 
-					new Text(
-						"Bot " + Random.Next(0, 1000).ToString("0000"),
-						20, 
-						Color.White, 
-						new Vector2f(0f, 0f))
-					)
-				) 
-				as Player;
-			
-			
-			Players.Add(bot ?? throw new NullReferenceException());
-		}
+			Player player = Engine.RegisterActor(new Player(new PlayerInput(Camera), "Player")) as Player;
 
-		for (int i = 0; i < GameConfiguration.MaxFood; i++)
-		{
-			Food food = Engine.RegisterActor(new Food(RandomMapPosition ())) as Food;
-
-			FoodList.Add(food ?? throw new NullReferenceException());
-		}
+			Players.Add(player ?? throw new NullReferenceException());
 		
+			for (int i = 0; i < GameConfiguration.MaxBots; i++)
+			{
+				Player bot = Engine.RegisterActor(new Player(new BotInput(), "Bot " + Random.Next(0, 9999).ToString("0000"))) as Player;
+
+				Players.Add(bot ?? throw new NullReferenceException());
+			}
+
+			for (int i = 0; i < GameConfiguration.MaxFood; i++)
+			{
+				Food food = Engine.RegisterActor(new Food(RandomMapPosition ())) as Food;
+
+				FoodList.Add(food ?? throw new NullReferenceException());
+			}
+		}
+		catch (NullReferenceException e)
+		{
+			Console.WriteLine("Failed to initialize game, try again");
+			Initialize ();
+		}
 #pragma warning restore CS8600
 		
 		Engine.RegisterActor(scoreboard);

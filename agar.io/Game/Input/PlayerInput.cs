@@ -6,11 +6,13 @@ using SFML.Window;
 
 namespace agar.io.Game.Input;
 
-public class MouseInput : IInput
+public class PlayerInput : IInput
 {
 	private View camera;
+	private Dictionary<Keyboard.Key, Action> keyActions = new Dictionary<Keyboard.Key, Action> ();
 
-	public MouseInput(View camera)
+
+	public PlayerInput(View camera)
 	{
 		this.camera = camera;
 	}
@@ -22,5 +24,21 @@ public class MouseInput : IInput
 		Vector2f mouseOffset = new Vector2f(mousePosition.X - center.X, mousePosition.Y - center.Y);
 
 		return mouseOffset + camera.Center;
+	}
+
+	public void HandleInput(Window window)
+	{
+		foreach (KeyValuePair<Keyboard.Key, Action> keyAction in keyActions)
+		{
+			if (Keyboard.IsKeyPressed(keyAction.Key))
+			{
+				keyAction.Value.Invoke();
+			}
+		}
+	}
+
+	public void BindKey(Keyboard.Key key, Action action)
+	{
+		keyActions.TryAdd(key, action);
 	}
 }

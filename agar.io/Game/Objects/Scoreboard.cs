@@ -45,5 +45,8 @@ public class Scoreboard : BaseObject, IDrawable, IUpdatable
 			}
 			text.SetMessage(text.GetMessage () + player.NickName + " - " + player.Radius + "\n");
 		}
+		
+		if (!players.Contains(Player.LocalPlayer))
+			text.SetMessage(text.GetMessage () + Player.LocalPlayer.NickName + " - " + Player.LocalPlayer.Radius + " (You)\n");
 	}
 }
