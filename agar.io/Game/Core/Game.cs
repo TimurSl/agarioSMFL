@@ -169,21 +169,7 @@ public class Game
 					Players[playerId].Destroy ();
 				}
 				
-				Player? bot = Engine.RegisterActor(
-						new Player(
-							RandomMapPosition (),
-							GameConfiguration.DefaultPlayerRadius, 
-							new BotInput(), 
-							false, 
-							new Text(
-								"Bot " + Random.Next(0, 1000).ToString("0000"),
-								20, 
-								Color.White, 
-								new Vector2f(0f, 0f)
-							)
-						)
-					) 
-					as Player;
+				Player? bot = Engine.RegisterActor(new Player(new BotInput(), "Bot " + Random.Next(0, 1000).ToString("0000"))) as Player;
 				
 				Players.Add(bot ?? throw new NullReferenceException());
 			}
@@ -237,7 +223,7 @@ public class Game
 	/// Returns a random position on the map
 	/// </summary>
 	/// <returns>A random position on Map</returns>
-	private Vector2f RandomMapPosition()
+	public static Vector2f RandomMapPosition()
 	{
 		return new Vector2f(Random.Next(0, GameConfiguration.MapWidth), Random.Next(0, GameConfiguration.MapHeight));
 	}

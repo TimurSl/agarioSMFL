@@ -1,5 +1,7 @@
-﻿using agar.io.Engine.Interfaces;
+﻿using System.Diagnostics;
+using agar.io.Engine.Interfaces;
 using agar.io.Game.Core.Types;
+using agar.io.Game.Input;
 using agar.io.Game.Input.Interfaces;
 using SFML.Graphics;
 using SFML.System;
@@ -30,6 +32,9 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	}
 
 	public new bool IsInitialized { get; set; }
+	
+	private Stopwatch stopwatch = new Stopwatch();
+	private float cooldown = 1f;
 
 
 	public Player(Vector2f pos, int radius, IInput input, bool isPlayer = false, Text nickName = null)
@@ -54,9 +59,31 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		this.IsPlayer = isPlayer;
 		this.NickNameLabel = nickName;
 		this.NickName = nickName?.GetMessage () ?? "Player";
-		
-		IsInitialized = true;
 	}
+
+	public Player(IInput input, string nickName)
+	{
+		Color randomColor = new Color((byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255));
+		this.Position = Game.Core.Game.RandomMapPosition ();
+
+		Shape = new CircleShape(GameConfiguration.DefaultPlayerRadius);
+		Shape.Position = Position;
+		Shape.FillColor = randomColor;
+		Shape.Origin = new Vector2f(GameConfiguration.DefaultPlayerRadius, GameConfiguration.DefaultPlayerRadius);
+
+		if (input is MouseInput)
+		{
+			Shape.OutlineColor = Color.Black;
+			Shape.OutlineThickness = 3f;
+			LocalPlayer = this;
+		}
+
+		this.input = input;
+		this.IsPlayer = this.input is MouseInput;
+		this.NickNameLabel = new Text(nickName, 20, Color.White, new Vector2f(0, 0));
+		this.NickName = nickName;
+	}
+	
 
 
 	public void Draw(RenderTarget target)
@@ -89,7 +116,11 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		{
 			if (Keyboard.IsKeyPressed(Keyboard.Key.R))
 			{
-				ChangeSoul ();
+				if (!stopwatch.IsRunning || stopwatch.Elapsed.TotalSeconds >= cooldown)
+				{
+					stopwatch.Restart();
+					ChangeSoul();
+				}
 			}
 		}
 		
@@ -167,7 +198,10 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		newPlayer.IsPlayer = true;
 		
 		(oldPlayer.input, newPlayer.input) = (newPlayer.input, oldPlayer.input);
-		newPlayer.Shape.OutlineThickness = 0;
+		
+		// update outline
+		newPlayer.Shape.OutlineColor = Color.Black;
+		newPlayer.Shape.OutlineThickness = 3f;
 		
 		LocalPlayer = newPlayer;
 	}
@@ -182,6 +216,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		if (this == LocalPlayer)
 		{
 			ChangeSoul ();
+			Console.WriteLine("You died, but soul was changed! You are now " + LocalPlayer.NickName);
 			return;
 		}
 		
