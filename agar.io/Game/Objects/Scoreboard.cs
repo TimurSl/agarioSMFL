@@ -28,7 +28,7 @@ public class Scoreboard : BaseObject, IDrawable, IUpdatable
 	public void Update()
 	{
 		var players = Core.Game.Players;
-		players.Sort((x, y) => y.Radius.CompareTo(x.Radius));
+		players.Sort((x, y) => y.PlayerBlob.Radius.CompareTo(x.PlayerBlob.Radius));
 
 		if (players.Count > 10)
 			players = players.GetRange(0, 10);
@@ -40,13 +40,13 @@ public class Scoreboard : BaseObject, IDrawable, IUpdatable
 		{
 			if (player == Player.LocalPlayer)
 			{
-				text.SetMessage(text.GetMessage () + player.NickName + " - " + player.Radius + " (You)\n");
+				text.SetMessage(text.GetMessage () + player.PlayerBlob.NickName + " - " + player.PlayerBlob.Radius + " (You)\n");
 				continue;
 			}
-			text.SetMessage(text.GetMessage () + player.NickName + " - " + player.Radius + "\n");
+			text.SetMessage(text.GetMessage () + player.PlayerBlob.NickName + " - " + player.PlayerBlob.Radius + "\n");
 		}
 		
 		if (!players.Contains(Player.LocalPlayer))
-			text.SetMessage(text.GetMessage () + Player.LocalPlayer.NickName + " - " + Player.LocalPlayer.Radius + " (You)\n");
+			text.SetMessage(text.GetMessage () + Player.LocalPlayer.PlayerBlob.NickName + " - " + Player.LocalPlayer.PlayerBlob.Radius + " (You)\n");
 	}
 }

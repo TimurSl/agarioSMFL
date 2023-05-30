@@ -1,17 +1,16 @@
 ﻿using agar.io.Engine.Config;
+using agar.io.Engine.Interfaces;
 using agar.io.Game.Core.Types;
 using agar.io.Game.Input;
+using agar.io.Game.Input.Interfaces;
 using agar.io.Game.Objects;
 using SFML.Graphics;
 using SFML.System;
-using Text = agar.io.Game.Objects.Text;
 
 namespace agar.io.Game.Core;
 
-public class Game
+public class Game : BaseGame
 {
-	private Engine.Engine Engine = new();
-
 	public static Random Random = new();
 	
 	public static List<Player> Players = new();
@@ -31,56 +30,44 @@ public class Game
 	/// Initializes the game, clears the player list and food list and adds a new player and bots
 	/// </summary>
 	/// <exception cref="NullReferenceException"></exception>
-	private void Initialize()
+	public override void Initialize()
 	{
-		Engine.DestroyAll ();
+		base.Initialize();
+		
 		Players.Clear();
 		FoodList.Clear();
 
-#pragma warning disable CS8600
 		try
 		{
-			Player player = Engine.RegisterActor(new Player(new PlayerInput(Camera), "Player")) as Player;
+			Player player = CreatePlayer(new PlayerInput(Camera));
 
 			Players.Add(player ?? throw new NullReferenceException());
 		
 			for (int i = 0; i < GameConfiguration.MaxBots; i++)
 			{
-				Player bot = Engine.RegisterActor(new Player(new BotInput(), "Bot " + Random.Next(0, 9999).ToString("0000"))) as Player;
+				Player bot = CreatePlayer(new BotInput ());
 
 				Players.Add(bot ?? throw new NullReferenceException());
 			}
 
 			for (int i = 0; i < GameConfiguration.MaxFood; i++)
 			{
-				Food food = Engine.RegisterActor(new Food(RandomMapPosition ())) as Food;
+				var food = CreateFood ();
 
 				FoodList.Add(food ?? throw new NullReferenceException());
 			}
+			
+			Engine.RegisterActor(scoreboard);
 		}
 		catch (NullReferenceException e)
 		{
 			Console.WriteLine("Failed to initialize game, try again");
 			Initialize ();
 		}
-#pragma warning restore CS8600
-		
-		Engine.RegisterActor(scoreboard);
-
 
 	}
-	
-	public void Run()
-	{
-		Initialize ();
-		
-		Engine.OnFrameStart += OnFrameStart;
-		Engine.OnFrameEnd += OnFrameEnd;
-		
-		Engine.Run();
-	}
-	
-	private void OnFrameEnd()
+
+	protected override void OnFrameEnd()
 	{
 		for (var pId = 0; pId < Players.Count; pId++)
 		{
@@ -89,9 +76,9 @@ public class Game
 			CheckCollisionWithPlayer(pId);
 		}
 		UpdateCamera (Player.LocalPlayer ?? Players[0] ?? throw new NullReferenceException());
-
 	}
-	private void OnFrameStart()
+
+	protected override void OnFrameStart()
 	{
 		io.Engine.Engine.Window.SetView(Camera);
 		CheckZoom();
@@ -106,13 +93,13 @@ public class Game
 	{
 		for (var foodId = 0; foodId < FoodList.Count; foodId++)
 		{
-			if (CheckCollision(Players[playerId].Shape, FoodList[foodId].shape))
+			if (CheckCollision(Players[playerId].PlayerBlob.Shape, FoodList[foodId].shape))
 			{
 				Players[playerId].AddMass(1);
 
 				FoodList[foodId].Destroy ();
 
-				Food? food = Engine.RegisterActor(new Food(RandomMapPosition ())) as Food;
+				Food? food = CreateFood ();
 				
 				FoodList.Add(food ?? throw new NullReferenceException());
 			}
@@ -134,36 +121,45 @@ public class Game
 				continue;
 			}
 
-			if (CheckCollision(Players[playerId].Shape, Players[otherPlayer].Shape))
-			{
-				if (Players[playerId].Shape.Radius > Players[otherPlayer].Shape.Radius)
-				{
-					Players[playerId].AddMass(Players[otherPlayer].Shape.Radius / 2);
 
-					Players[otherPlayer].Destroy ();
+			Player attacker = Players[playerId];
+			Player victim = Players[otherPlayer];
+			
+			if (CheckCollision(attacker.PlayerBlob.Shape, victim.PlayerBlob.Shape))
+			{
+				if (Math.Abs(attacker.PlayerBlob.Shape.Radius - victim.PlayerBlob.Shape.Radius) < 0.1f)
+					continue;
+
+				if (attacker.PlayerBlob.Shape.Radius > victim.PlayerBlob.Shape.Radius)
+				{
+					attacker.PlayerBlob.AddMass(victim.PlayerBlob.Shape.Radius / 2);
+
+					victim.Destroy ();
 				}
 				else
 				{
-					Players[otherPlayer].AddMass(Players[playerId].Shape.Radius / 2);
+					victim.PlayerBlob.AddMass(attacker.PlayerBlob.Shape.Radius / 2);
 
-					Players[playerId].Destroy ();
+					attacker.Destroy ();
 				}
 				
-				Player? bot = Engine.RegisterActor(new Player(new BotInput(), "Bot " + Random.Next(0, 1000).ToString("0000"))) as Player;
+				var bot = CreatePlayer (new BotInput ());
 				
 				Players.Add(bot ?? throw new NullReferenceException());
 			}
 		}
 	}
 
+
+
 	/// <summary>
 	/// Checking player radius and zooming out if needed
 	/// </summary>
 	private void CheckZoom()
 	{
-		float zoomFactor = 1f + (Player.LocalPlayer.Radius / GameConfiguration.MaxRadiusUntilZoom) * 0.1f;
+		float zoomFactor = 1f + (Player.LocalPlayer.PlayerBlob.Radius / GameConfiguration.MaxRadiusUntilZoom) * 0.1f;
 
-		if (Player.LocalPlayer.Radius >= GameConfiguration.MaxRadiusUntilZoom &&
+		if (Player.LocalPlayer.PlayerBlob.Radius >= GameConfiguration.MaxRadiusUntilZoom &&
 		    GameConfiguration.MaxRadiusUntilZoom < GameConfiguration.AbsoluteMaxRadius)
 		{
 			GameConfiguration.MaxRadiusUntilZoom += GameConfiguration.MaxRadiusIncreaseStep;
@@ -194,7 +190,7 @@ public class Game
 	/// <param name="player">The target player for Camera</param>
 	private void UpdateCamera(Player player)
 	{
-		Vector2f playerPosition = player.Position;
+		Vector2f playerPosition = player.PlayerBlob.Position;
 
 		Camera.Center = playerPosition;
 	}
@@ -215,6 +211,20 @@ public class Game
 	public static Vector2f GetLeftTopCorner()
 	{
 		return new Vector2f(Camera.Center.X - Camera.Size.X / 2, Camera.Center.Y - Camera.Size.Y / 2);
+	}
+	
+	private Food? CreateFood()
+	{
+		Food food = Engine.RegisterActor(new Food(RandomMapPosition ())) as Food;
+		return food;
+	}
+	
+	private Player? CreatePlayer(IInput input)
+	{
+		string nickname = input is PlayerInput ? "Player" : "Bot " + Random.Next(0, 9999).ToString("0000");
+
+		Player? player = Engine.RegisterActor(new Player(input, nickname)) as Player;
+		return player;
 	}
 
 }

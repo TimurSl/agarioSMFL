@@ -12,62 +12,41 @@ namespace agar.io.Game.Objects;
 
 public class Player : BaseObject, IDrawable, IUpdatable
 {
-	public readonly CircleShape Shape;
-	public bool IsPlayer = false;
-	public Vector2f Position;
-	public readonly Text NickNameLabel;
-	public readonly string NickName = "Player";
-
-	public int ZIndex { get; set; } = 1;
-
-	private float movementSpeed = 200f;
-	public IInput input;
-	
 	public static Player LocalPlayer { get; set; }
-	
-	public float Radius
-	{
-		get => Shape.Radius;
-		set => Shape.Radius = value;
-	}
+	public bool IsPlayer = false;
+
+	public IInput input;
+	public Blob PlayerBlob;
 
 	public new bool IsInitialized { get; set; }
+	public int ZIndex { get; set; } = 1;
 	
-	private Stopwatch stopwatch = new Stopwatch();
-	private float cooldown = 1f;
+	private Vector2f tempPosition;
+	private float movementSpeed = GameConfiguration.MovementSpeed;
+
 
 	public Player(IInput input, string nickName)
 	{
-		Color randomColor = new Color((byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255), (byte)Core.Game.Random.Next(0, 255));
-		this.Position = Game.Core.Game.RandomMapPosition ();
-
-		Shape = new CircleShape(GameConfiguration.DefaultPlayerRadius);
-		Shape.Position = Position;
-		Shape.FillColor = randomColor;
-		Shape.Origin = new Vector2f(GameConfiguration.DefaultPlayerRadius, GameConfiguration.DefaultPlayerRadius);
+		PlayerBlob = new Blob(nickName);
+		tempPosition = PlayerBlob.Position;
 
 		if (input is PlayerInput)
 		{
-			Shape.OutlineColor = Color.Black;
-			Shape.OutlineThickness = 3f;
 			LocalPlayer = this;
+			IsPlayer = true;
 		}
 
 		this.input = input;
-		
+
 		BindKeys ();
 
 		this.IsPlayer = this.input is PlayerInput;
-		this.NickNameLabel = new Text(nickName, 20, Color.White, new Vector2f(0, 0));
-		this.NickName = nickName;
-		
-		stopwatch.Start();
 	}
 
 	public void Draw(RenderTarget target)
 	{
-		target.Draw(Shape);
-		NickNameLabel.Draw(target);
+		target.Draw(PlayerBlob.Shape);
+		PlayerBlob.NickNameLabel.Draw(target);
 	}
 
 
@@ -77,28 +56,33 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		
 		if (this != LocalPlayer)
 		{
-			Shape.OutlineThickness = 3;
+			PlayerBlob.Shape.OutlineThickness = 3;
 
-			if (Radius > LocalPlayer.Radius)
+			if (PlayerBlob.Radius > LocalPlayer.PlayerBlob.Radius)
 			{
-				Shape.OutlineColor = GameConfiguration.darkRed;
+				PlayerBlob.Shape.OutlineColor = GameConfiguration.darkRed;
 			}
-			else if (Shape.Radius < LocalPlayer.Shape.Radius)
+			else if (PlayerBlob.Radius < LocalPlayer.PlayerBlob.Radius)
 			{
-				Shape.OutlineColor = GameConfiguration.darkGreen;
+				PlayerBlob.Shape.OutlineColor = GameConfiguration.darkGreen;
 			}
 			else
 			{
-				Shape.OutlineThickness = 0;
+				PlayerBlob.Shape.OutlineThickness = 0;
 			}
+		}
+		else
+		{
+			PlayerBlob.Shape.OutlineThickness = 3;
+			PlayerBlob.Shape.OutlineColor = Color.Black;
 		}
 		
 
 		UpdateMovement();
 
-		NickNameLabel.SetPosition(new Vector2f(Shape.Position.X, Shape.Position.Y - Shape.Radius - 30));
+		PlayerBlob.NickNameLabel.SetPosition(PlayerBlob.Position + new Vector2f(0, -PlayerBlob.Radius - 20));
 		
-		movementSpeed = 200f - (Shape.Radius / 10f);
+		movementSpeed = 200f - (PlayerBlob.Radius / 10f);
 	}
 
 	/// <summary>
@@ -107,19 +91,19 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	private void UpdateMovement()
 	{
 		Vector2f targetPosition = input.GetDirection(Engine.Engine.Window);
-		Vector2f direction = targetPosition - Shape.Position;
+		Vector2f direction = targetPosition - PlayerBlob.Position;
 		
 		if (direction != new Vector2f(0, 0))
 		{
 			float magnitude = MathF.Sqrt((direction.X * direction.X) + (direction.Y * direction.Y));
 			direction /= magnitude;
 
-			Position += direction * movementSpeed * Time.DeltaTime;
+			tempPosition += direction * movementSpeed * Time.DeltaTime;
 		}
 		
 		ClampMovement ();
 
-		Shape.Position = Position;
+		PlayerBlob.Position = tempPosition;
 	}
 
 	/// <summary>
@@ -127,15 +111,19 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	/// </summary>
 	private void ClampMovement()
 	{
-		if (Position.X < Shape.Radius)
-			Position.X = Shape.Radius;
-		else if (Position.X > GameConfiguration.MapWidth - Shape.Radius)
-			Position.X = GameConfiguration.MapWidth - Shape.Radius;
+		Vector2f position = tempPosition;
+		
+		if (position.X < PlayerBlob.Radius)
+			position.X = PlayerBlob.Radius;
+		else if (position.X > GameConfiguration.MapWidth - PlayerBlob.Radius)
+			position.X = GameConfiguration.MapWidth - PlayerBlob.Radius;
 
-		if (Position.Y < Shape.Radius)
-			Position.Y = Shape.Radius;
-		else if (Position.Y > GameConfiguration.MapWidth - Shape.Radius)
-			Position.Y = GameConfiguration.MapWidth - Shape.Radius;
+		if (position.Y < PlayerBlob.Radius)
+			position.Y = PlayerBlob.Radius;
+		else if (position.Y > GameConfiguration.MapWidth - PlayerBlob.Radius)
+			position.Y = GameConfiguration.MapWidth - PlayerBlob.Radius;
+		
+		tempPosition = position;
 	}
 
 	/// <summary>
@@ -144,14 +132,14 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	/// <param name="mass">The amount of mass</param>
 	public void AddMass(float mass)
 	{
-		if (Shape.Radius + mass > GameConfiguration.AbsoluteMaxRadius)
+		if (PlayerBlob.Radius + mass > GameConfiguration.AbsoluteMaxRadius)
 			return;
 		
-		Shape.Radius += mass;
-		Shape.Radius = Math.Clamp(Shape.Radius, 0, GameConfiguration.AbsoluteMaxRadius);
+		PlayerBlob.Radius += mass;
+		PlayerBlob.Radius = Math.Clamp(PlayerBlob.Radius, 0, GameConfiguration.AbsoluteMaxRadius);
 		
-		Shape.Origin = new Vector2f(Shape.Radius, Shape.Radius);
-		Shape.Radius = MathF.Floor(Shape.Radius);
+		PlayerBlob.Shape.Origin = new Vector2f(PlayerBlob.Radius, PlayerBlob.Radius);
+		PlayerBlob.Radius = MathF.Floor(PlayerBlob.Radius);
 	}
 
 	private void ChangeSoul()
@@ -164,19 +152,11 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			newPlayer = Core.Game.Players[Core.Game.Random.Next(0, Core.Game.Players.Count)];
 		}
 
-		oldPlayer.IsPlayer = false;
-		newPlayer.IsPlayer = true;
 
-		oldPlayer.input = new BotInput ();
-		newPlayer.input = new PlayerInput (Game.Core.Game.Camera);
+		(oldPlayer.PlayerBlob, newPlayer.PlayerBlob) = (newPlayer.PlayerBlob, oldPlayer.PlayerBlob);
+		(oldPlayer.tempPosition, newPlayer.tempPosition) = (newPlayer.tempPosition, oldPlayer.tempPosition);
 		
-		newPlayer.BindKeys ();
-
-		// update outline
-		newPlayer.Shape.OutlineColor = Color.Black;
-		newPlayer.Shape.OutlineThickness = 3f;
-		
-		LocalPlayer = newPlayer;
+		newPlayer.PlayerBlob.Shape.OutlineColor = Color.Black;
 	}
 
 	/// <summary>
@@ -184,17 +164,17 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	/// </summary>
 	public new void Destroy()
 	{
-		base.Destroy();
-		
 		if (this == LocalPlayer)
 		{
 			ChangeSoul ();
-			Console.WriteLine("You died, but soul was changed! You are now " + LocalPlayer.NickName);
+			Console.WriteLine("You died, but soul was changed! You are now " + LocalPlayer.PlayerBlob.NickName);
 			return;
 		}
+
+		base.Destroy();
 		
-		Console.WriteLine($"Player {NickName} died!");
-		
+		Console.WriteLine($"Player {PlayerBlob.NickName} died!");
+
 		Core.Game.Players.Remove(this);
 	}
 

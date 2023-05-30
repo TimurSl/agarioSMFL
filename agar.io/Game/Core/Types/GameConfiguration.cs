@@ -19,4 +19,6 @@ public static class GameConfiguration
 	
 	public static Color darkGreen = new Color(0, 255, 0);
 	public static Color darkRed = new Color(255, 0, 0);
+	
+	public const float MovementSpeed = 200f;
 }
