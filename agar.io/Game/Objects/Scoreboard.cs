@@ -1,4 +1,5 @@
 using agar.io.Engine.Interfaces;
+using agar.io.Engine.Types;
 using SFML.Graphics;
 using SFML.System;
 

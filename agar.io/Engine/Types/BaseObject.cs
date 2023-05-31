@@ -1,4 +1,6 @@
-namespace agar.io.Engine.Interfaces;
+using agar.io.Engine.Interfaces;
+
+namespace agar.io.Engine.Types;
 
 public abstract class BaseObject
 {

@@ -1,5 +1,6 @@
 ﻿using agar.io.Engine.Config;
 using agar.io.Engine.Interfaces;
+using agar.io.Engine.Types;
 using agar.io.Game.Core.Types;
 using agar.io.Game.Input;
 using agar.io.Game.Input.Bot;
@@ -68,6 +69,12 @@ public class Game : BaseGame
 
 	}
 
+	protected override void OnFrameStart()
+	{
+		io.Engine.Engine.Window.SetView(Camera);
+		CheckZoom();
+	}
+
 	protected override void OnFrameEnd()
 	{
 		for (var p = 0; p < Players.Count; p++)
@@ -77,12 +84,6 @@ public class Game : BaseGame
 			CheckCollisionWithPlayer(Players[p]);
 		}
 		UpdateCamera (Player.LocalPlayer ?? Players[0] ?? throw new NullReferenceException());
-	}
-
-	protected override void OnFrameStart()
-	{
-		io.Engine.Engine.Window.SetView(Camera);
-		CheckZoom();
 	}
 
 	/// <summary>
@@ -124,7 +125,7 @@ public class Game : BaseGame
 				continue;
 			}
 			
-			if (CheckCollision(attacker.PlayerBlob.Shape, victim.PlayerBlob.Shape))
+			if (attacker.CollidesWithPlayer(victim))
 			{
 				if (Math.Abs(attacker.PlayerBlob.Shape.Radius - victim.PlayerBlob.Shape.Radius) < 0.1f)
 					continue;

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using agar.io.Engine.Interfaces;
+using agar.io.Engine.Types;
 using agar.io.Game.Core.Types;
 using agar.io.Game.Input;
 using agar.io.Game.Input.Interfaces;
@@ -23,7 +24,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	
 	private Vector2f tempPosition;
 	private float movementSpeed = GameConfiguration.MovementSpeed;
-
+	
 
 	public Player(IInput input, string nickName)
 	{
@@ -78,7 +79,6 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			PlayerBlob.Shape.OutlineColor = Color.Black;
 		}
 		
-
 		UpdateMovement();
 
 		PlayerBlob.NickNameLabel.SetPosition(PlayerBlob.Position + new Vector2f(0, -PlayerBlob.Radius - 20));
@@ -105,6 +105,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		ClampMovement ();
 
 		PlayerBlob.Position = tempPosition;
+		Gizmos.DrawLine(PlayerBlob.Position, targetPosition, Color.Red);
 	}
 
 	/// <summary>
@@ -197,5 +198,12 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		float mass = player.PlayerBlob.Radius;
 		player.Destroy();
 		AddMass(mass);
+	}
+	
+	public bool CollidesWithPlayer(Player player)
+	{
+		float distance = player.PlayerBlob.Position.GetDistance(PlayerBlob.Position);
+		float radius = player.PlayerBlob.Radius + PlayerBlob.Radius;
+		return distance <= radius;
 	}
 }
