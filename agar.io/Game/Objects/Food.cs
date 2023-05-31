@@ -10,6 +10,12 @@ public class Food : BaseObject, IDrawable
 	public int ZIndex { get; set; } = 0;
 
 	private float radius = 5f;
+	
+	public Vector2f Position
+	{
+		get => shape.Position;
+		set => shape.Position = value;
+	}
 
 
 	public Food(Vector2f position)

@@ -2,6 +2,7 @@
 using agar.io.Engine.Interfaces;
 using agar.io.Game.Core.Types;
 using agar.io.Game.Input;
+using agar.io.Game.Input.Bot;
 using agar.io.Game.Input.Interfaces;
 using agar.io.Game.Objects;
 using SFML.Graphics;
@@ -45,7 +46,7 @@ public class Game : BaseGame
 		
 			for (int i = 0; i < GameConfiguration.MaxBots; i++)
 			{
-				Player bot = CreatePlayer(new BotInput ());
+				Player bot = CreatePlayer(new AdvancedBotInput ());
 
 				Players.Add(bot ?? throw new NullReferenceException());
 			}
@@ -69,11 +70,11 @@ public class Game : BaseGame
 
 	protected override void OnFrameEnd()
 	{
-		for (var pId = 0; pId < Players.Count; pId++)
+		for (var p = 0; p < Players.Count; p++)
 		{
-			CheckCollisionWithFood(pId);
+			CheckCollisionWithFood(Players[p]);
 
-			CheckCollisionWithPlayer(pId);
+			CheckCollisionWithPlayer(Players[p]);
 		}
 		UpdateCamera (Player.LocalPlayer ?? Players[0] ?? throw new NullReferenceException());
 	}
@@ -87,15 +88,15 @@ public class Game : BaseGame
 	/// <summary>
 	/// Check if player collided with food
 	/// </summary>
-	/// <param name="playerId">ID of player in Players list</param>
+	/// <param name="attacker">ID of player in Players list</param>
 	/// <exception cref="NullReferenceException"></exception>
-	private void CheckCollisionWithFood(int playerId)
+	private void CheckCollisionWithFood(Player attacker)
 	{
 		for (var foodId = 0; foodId < FoodList.Count; foodId++)
 		{
-			if (CheckCollision(Players[playerId].PlayerBlob.Shape, FoodList[foodId].shape))
+			if (CheckCollision(attacker.PlayerBlob.Shape, FoodList[foodId].shape))
 			{
-				Players[playerId].AddMass(1);
+				attacker.AddMass(1);
 
 				FoodList[foodId].Destroy ();
 
@@ -110,40 +111,34 @@ public class Game : BaseGame
 	/// <summary>
 	/// Check if player collided with other player
 	/// </summary>
-	/// <param name="playerId">ID of player in Players list</param>
+	/// <param name="attacker">ID of player in Players list</param>
 	/// <exception cref="NullReferenceException"></exception>
-	private void CheckCollisionWithPlayer(int playerId)
+	private void CheckCollisionWithPlayer(Player attacker)
 	{
 		for (var otherPlayer = 0; otherPlayer < Players.Count; otherPlayer++)
 		{
-			if (otherPlayer == playerId)
+			Player victim = Players[otherPlayer];
+			
+			if (attacker == victim)
 			{
 				continue;
 			}
-
-
-			Player attacker = Players[playerId];
-			Player victim = Players[otherPlayer];
 			
 			if (CheckCollision(attacker.PlayerBlob.Shape, victim.PlayerBlob.Shape))
 			{
 				if (Math.Abs(attacker.PlayerBlob.Shape.Radius - victim.PlayerBlob.Shape.Radius) < 0.1f)
 					continue;
 
-				if (attacker.PlayerBlob.Shape.Radius > victim.PlayerBlob.Shape.Radius)
+				if (attacker.CanEat(victim))
 				{
-					attacker.PlayerBlob.AddMass(victim.PlayerBlob.Shape.Radius / 2);
-
-					victim.Destroy ();
+					attacker.EatPlayer(victim);
 				}
 				else
 				{
-					victim.PlayerBlob.AddMass(attacker.PlayerBlob.Shape.Radius / 2);
-
-					attacker.Destroy ();
+					victim.EatPlayer(attacker);
 				}
 				
-				var bot = CreatePlayer (new BotInput ());
+				var bot = CreatePlayer (new AdvancedBotInput ());
 				
 				Players.Add(bot ?? throw new NullReferenceException());
 			}

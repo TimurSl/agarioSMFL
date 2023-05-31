@@ -9,8 +9,8 @@ public static class GameConfiguration
 	public static float MaxRadiusIncreaseStep = 70f;
 	public static float AbsoluteMaxRadius = 1000f;
 
-	public const int MapWidth = 5000;
-	public const int MapHeight = 5000;
+	public const int MapWidth = 10000;
+	public const int MapHeight = 10000;
 
 	public const int MaxBots = 20;
 	public const int MaxFood = 800;

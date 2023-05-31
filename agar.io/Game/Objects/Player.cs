@@ -37,6 +37,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		}
 
 		this.input = input;
+		this.input.ControllerPlayer = this;
 
 		BindKeys ();
 
@@ -90,7 +91,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	/// </summary>
 	private void UpdateMovement()
 	{
-		Vector2f targetPosition = input.GetDirection(Engine.Engine.Window);
+		Vector2f targetPosition = input.GetTargetPosition(Engine.Engine.Window);
 		Vector2f direction = targetPosition - PlayerBlob.Position;
 		
 		if (direction != new Vector2f(0, 0))
@@ -185,5 +186,16 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			playerInput.BindKey(Keyboard.Key.R, ChangeSoul);
 		}
 	}
-
+	
+	public bool CanEat(Player player)
+	{
+		return PlayerBlob.Radius > player.PlayerBlob.Radius;
+	}
+	
+	public void EatPlayer(Player player)
+	{
+		float mass = player.PlayerBlob.Radius;
+		player.Destroy();
+		AddMass(mass);
+	}
 }
