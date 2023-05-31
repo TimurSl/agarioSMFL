@@ -128,22 +128,6 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		tempPosition = position;
 	}
 
-	/// <summary>
-	/// Adds mass to the player. Radius is increased by the mass.
-	/// </summary>
-	/// <param name="mass">The amount of mass</param>
-	public void AddMass(float mass)
-	{
-		if (PlayerBlob.Radius + mass > GameConfiguration.AbsoluteMaxRadius)
-			return;
-		
-		PlayerBlob.Radius += mass;
-		PlayerBlob.Radius = Math.Clamp(PlayerBlob.Radius, 0, GameConfiguration.AbsoluteMaxRadius);
-		
-		PlayerBlob.Shape.Origin = new Vector2f(PlayerBlob.Radius, PlayerBlob.Radius);
-		PlayerBlob.Radius = MathF.Floor(PlayerBlob.Radius);
-	}
-
 	private void ChangeSoul()
 	{
 		Player oldPlayer = this;
@@ -195,9 +179,9 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	
 	public void EatPlayer(Player player)
 	{
-		float mass = player.PlayerBlob.Radius;
+		float mass = player.PlayerBlob.Radius / 2f;
 		player.Destroy();
-		AddMass(mass);
+		PlayerBlob.AddMass(mass);
 	}
 	
 	public bool CollidesWithPlayer(Player player)

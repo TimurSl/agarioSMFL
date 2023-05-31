@@ -97,7 +97,7 @@ public class Game : BaseGame
 		{
 			if (CheckCollision(attacker.PlayerBlob.Shape, FoodList[foodId].shape))
 			{
-				attacker.AddMass(1);
+				attacker.PlayerBlob.AddMass(1);
 
 				FoodList[foodId].Destroy ();
 
