@@ -190,4 +190,5 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		float radius = player.PlayerBlob.Radius + PlayerBlob.Radius;
 		return distance <= radius;
 	}
+	
 }

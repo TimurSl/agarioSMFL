@@ -1,9 +1,9 @@
 using agar.io.Engine.Types;
 using agar.io.Game.Objects;
-using SFML.System;
+using SFML.Graphics;
 using Vector2f = SFML.System.Vector2f;
 
-namespace agar.io.Game.Input;
+namespace agar.io.Game.Input.Bot;
 
 public class BotUtilites
 {
@@ -26,6 +26,8 @@ public class BotUtilites
 			{
 				return nearestPlayer.PlayerBlob.Position;
 			}
+
+			return GetSafePosition(player, nearestPlayer);
 		}
 
 		return nearestFood.Position;
@@ -68,5 +70,19 @@ public class BotUtilites
 		}
 		
 		return nearestFood;
+	}
+
+	private static Vector2f GetSafePosition(Player victim, Player attacker)
+	{
+		Vector2f safePosition = victim.PlayerBlob.Position;
+		float distance = victim.PlayerBlob.Position.GetDistance(attacker.PlayerBlob.Position);
+		
+		if (distance < 200)
+		{
+			safePosition = victim.PlayerBlob.Position.GetPositionAwayFrom(attacker.PlayerBlob.Position, 200);
+			Gizmos.DrawLine(victim.PlayerBlob.Position, attacker.PlayerBlob.Position, Color.Green);
+		}
+		
+		return safePosition;
 	}
 }
