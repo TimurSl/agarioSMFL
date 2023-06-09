@@ -19,14 +19,18 @@ public class Engine
 	public Engine()
 	{
 		VideoMode videoMode = new VideoMode(EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight);
-		Window = new RenderWindow(videoMode, EngineConfiguration.WindowTitle, Styles.Titlebar | Styles.Close);
+		
+		Styles styles = Styles.Titlebar | Styles.Close;
+		
+		if (EngineConfiguration.Fullscreen)
+			styles |= Styles.Fullscreen;
+		
+		Window = new RenderWindow(videoMode, EngineConfiguration.WindowTitle, styles);
 		Window.SetFramerateLimit(EngineConfiguration.FrameRateLimit);
 	}
 	
 	public void Run()
 	{
-		Window.Closed += (sender, args) => Window.Close();
-		
 		while (Window.IsOpen)
 		{
 			Window.DispatchEvents();

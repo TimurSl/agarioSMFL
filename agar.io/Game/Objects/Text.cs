@@ -11,7 +11,7 @@ public class Text : IDrawable
 	
 	public Text(string message, uint size, SFML.Graphics.Color color, Vector2f position)
 	{
-		TextClass = new SFML.Graphics.Text(message, GameConfiguration.Font, size);
+		TextClass = new SFML.Graphics.Text(message, UIConfiguration.Font, size);
 		TextClass.Position = position;
 		TextClass.FillColor = color;
 		TextClass.OutlineColor = SFML.Graphics.Color.Black;

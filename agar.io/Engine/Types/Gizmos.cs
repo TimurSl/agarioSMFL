@@ -1,3 +1,4 @@
+using agar.io.Engine.Config;
 using SFML.Graphics;
 using SFML.System;
 
@@ -7,6 +8,9 @@ public static class Gizmos
 {
 	public static void DrawLine(Vector2f start, Vector2f end, Color color)
 	{
+		if (EngineConfiguration.DebugMode == false)
+			return;
+		
 		VertexArray line = new VertexArray(PrimitiveType.Lines, 2);
 		line[0] = new Vertex(start, color);
 		line[1] = new Vertex(end, color);
@@ -16,6 +20,9 @@ public static class Gizmos
 	
 	public static void DrawBox(Vector2f position, Vector2f size, Color color)
 	{
+		if (EngineConfiguration.DebugMode == false)
+			return;
+		
 		VertexArray box = new VertexArray(PrimitiveType.Quads, 4);
 		
 		box[0] = new Vertex(new Vector2f(position.X - size.X / 2, position.Y - size.Y / 2), color);
@@ -28,6 +35,9 @@ public static class Gizmos
 	
 	public static void DrawWireBox(Vector2f position, Vector2f size, Color color)
 	{
+		if (EngineConfiguration.DebugMode == false)
+			return;
+		
 		VertexArray box = new VertexArray(PrimitiveType.LineStrip, 5);
 		
 		box[0] = new Vertex(new Vector2f(position.X - size.X / 2, position.Y - size.Y / 2), color);
@@ -41,6 +51,9 @@ public static class Gizmos
 	
 	public static void DrawWireCircle(Vector2f position, float radius, Color color)
 	{
+		if (EngineConfiguration.DebugMode == false)
+			return;
+		
 		VertexArray circle = new VertexArray(PrimitiveType.LineStrip, 100);
 		for (uint i = 0; i < 100; i++)
 		{
@@ -53,6 +66,9 @@ public static class Gizmos
 
 	public static void DrawRect(Vector2f position, FloatRect rect, Color color)
 	{
+		if (EngineConfiguration.DebugMode == false)
+			return;
+		
 		VertexArray box = new VertexArray(PrimitiveType.Quads, 4);
 		
 		Vector2f center = new Vector2f(position.X + rect.Left + rect.Width / 2, position.Y + rect.Top + rect.Height / 2);
@@ -67,6 +83,9 @@ public static class Gizmos
 	
 	public static void DrawWireRect(Vector2f position, FloatRect rect, Color color)
 	{
+		if (EngineConfiguration.DebugMode == false)
+			return;
+		
 		VertexArray box = new VertexArray(PrimitiveType.LineStrip, 5);
 		
 		Vector2f center = new Vector2f(position.X + rect.Left + rect.Width / 2, position.Y + rect.Top + rect.Height / 2);

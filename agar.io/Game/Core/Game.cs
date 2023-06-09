@@ -86,6 +86,12 @@ public class Game : BaseGame
 		UpdateCamera (Player.LocalPlayer ?? Players[0] ?? throw new NullReferenceException());
 	}
 
+	protected override void OnWindowClosed(object sender, EventArgs args)
+	{
+		GameConfiguration.Save();
+		base.OnWindowClosed(sender, args);
+	}
+
 	/// <summary>
 	/// Check if player collided with food
 	/// </summary>

@@ -1,3 +1,6 @@
+using System.Reflection;
+using System.Text;
+using agar.io.Engine.Extensions;
 using SFML.Graphics;
 
 namespace agar.io.Engine.Config;
@@ -7,17 +10,17 @@ public class EngineConfiguration
 	/// <summary>
 	/// The width of the window
 	/// </summary>
-	public const int WindowWidth = 1280;
+	public static uint WindowWidth = 1280;
 	
 	/// <summary>
 	/// The height of the window
 	/// </summary>
-	public const int WindowHeight = 720;
+	public static uint WindowHeight = 720;
 	
 	/// <summary>
 	/// The maximum framerate of the game
 	/// </summary>
-	public const int FrameRateLimit = 120;
+	public static uint FrameRateLimit = 120;
 	
 	/// <summary>
 	/// The title of the window
@@ -28,4 +31,47 @@ public class EngineConfiguration
 	/// The background color of the window
 	/// </summary>
 	public static Color BackgroundColor = new Color(255, 255, 255);
+	
+	public static bool DebugMode = true;
+	public static bool Fullscreen = false;
+
+	static EngineConfiguration()
+	{
+		Load ();
+	}
+	
+	public static void Save()
+	{
+		StringBuilder cfg = new StringBuilder ();
+		var fields = typeof(EngineConfiguration).GetFields ();
+
+		foreach(FieldInfo fieldInfo in fields)
+		{
+			if (fieldInfo.IsSaveable ())
+				cfg.AppendLine($"{fieldInfo.Name}:{fieldInfo.GetValue(null)}");
+		}
+
+		File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory (), "engine.cfg"), cfg.ToString ());
+	}
+
+	public static void Load()
+	{
+		if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory (), "engine.cfg")))
+		{
+			Save ();
+			return;
+		}
+		
+		var lines = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory (), "engine.cfg"));
+
+		foreach (string line in lines)
+		{
+			var split = line.Split (":");
+			var field = typeof(EngineConfiguration).GetField (split[0]);
+			
+			var value = Convert.ChangeType (split[1], field.FieldType);
+			
+			field.SetValue (null, value);
+		}
+	}
 }

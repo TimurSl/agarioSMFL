@@ -62,11 +62,11 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 			if (PlayerBlob.Radius > LocalPlayer.PlayerBlob.Radius)
 			{
-				PlayerBlob.Shape.OutlineColor = GameConfiguration.darkRed;
+				PlayerBlob.Shape.OutlineColor = UIConfiguration.darkRed;
 			}
 			else if (PlayerBlob.Radius < LocalPlayer.PlayerBlob.Radius)
 			{
-				PlayerBlob.Shape.OutlineColor = GameConfiguration.darkGreen;
+				PlayerBlob.Shape.OutlineColor = UIConfiguration.darkGreen;
 			}
 			else
 			{
@@ -83,7 +83,21 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 		PlayerBlob.NickNameLabel.SetPosition(PlayerBlob.Position + new Vector2f(0, -PlayerBlob.Radius - 20));
 		
-		movementSpeed = 200f - (PlayerBlob.Radius / 10f);
+		movementSpeed = GameConfiguration.MovementSpeed - (PlayerBlob.Radius / 10f);
+		
+		if (GameConfiguration.EnableCheats)
+		{
+			foreach(Player player in Game.Core.Game.Players)
+			{
+				if (player != LocalPlayer)
+				{
+					if (LocalPlayer.CanEat(player))
+					{
+						Gizmos.DrawLine(LocalPlayer.PlayerBlob.Position, player.PlayerBlob.Position, Color.Cyan);
+					}
+				}
+			}
+		}
 	}
 
 	/// <summary>
@@ -169,12 +183,19 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		if (input is PlayerInput playerInput)
 		{
 			playerInput.BindKey(Keyboard.Key.R, ChangeSoul);
+			playerInput.BindKey(Keyboard.Key.P, RandomSpectate);
+			playerInput.BindKey(Keyboard.Key.O, ReturnSpecate);
 		}
 	}
 	
 	public bool CanEat(Player player)
 	{
 		return PlayerBlob.Radius > player.PlayerBlob.Radius;
+	}
+	
+	public bool IsEqual(Player player)
+	{
+		return Math.Abs(PlayerBlob.Radius - player.PlayerBlob.Radius) < 0.1f;
 	}
 	
 	public void EatPlayer(Player player)
@@ -186,9 +207,33 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	
 	public bool CollidesWithPlayer(Player player)
 	{
-		float distance = player.PlayerBlob.Position.GetDistance(PlayerBlob.Position);
+		float distance = player.PlayerBlob.Position.Distance(PlayerBlob.Position);
 		float radius = player.PlayerBlob.Radius + PlayerBlob.Radius;
 		return distance <= radius;
+	}
+
+	private void RandomSpectate()
+	{
+		Player player = Core.Game.Players[Core.Game.Random.Next(0, Core.Game.Players.Count)];
+		
+		while (player == this)
+		{
+			player = Core.Game.Players[Core.Game.Random.Next(0, Core.Game.Players.Count)];
+		}
+		
+		LocalPlayer = player;
+	}
+
+	private void ReturnSpecate()
+	{
+		foreach (Player player in Core.Game.Players)
+		{
+			if (player.IsPlayer)
+			{
+				LocalPlayer = player;
+				return;
+			}
+		}
 	}
 	
 }

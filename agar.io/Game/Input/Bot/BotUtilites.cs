@@ -1,4 +1,5 @@
 using agar.io.Engine.Types;
+using agar.io.Game.Core.Types;
 using agar.io.Game.Objects;
 using SFML.Graphics;
 using Vector2f = SFML.System.Vector2f;
@@ -17,20 +18,38 @@ public class BotUtilites
 		Food nearestFood = GetNearestFood(player);
 		Player nearestPlayer = GetNearestPlayer(player);
 		
-		float distanceToFood = nearestFood.Position.GetDistance(player.PlayerBlob.Position);
-		float distanceToPlayer = nearestPlayer.PlayerBlob.Position.GetDistance(player.PlayerBlob.Position);
+		float distanceToFood = nearestFood.Position.Distance(player.PlayerBlob.Position);
+		float distanceToPlayer = nearestPlayer.PlayerBlob.Position.Distance(player.PlayerBlob.Position);
+		distanceToPlayer -= nearestPlayer.PlayerBlob.Radius;
+		distanceToPlayer -= player.PlayerBlob.Radius;
+		
+		Vector2f position = new Vector2f(0, 0);
 		
 		if (distanceToPlayer < distanceToFood)
 		{
 			if (player.CanEat(nearestPlayer))
 			{
-				return nearestPlayer.PlayerBlob.Position;
+				position = nearestPlayer.PlayerBlob.Position;
 			}
-
-			return GetSafePosition(player, nearestPlayer);
+			else if (player.IsEqual(nearestPlayer))
+			{
+				position = nearestFood.Position;
+			}
+			else
+			{
+				position = GetSafePosition(player, nearestPlayer);
+			}
+		}
+		else if (distanceToPlayer < distanceToFood && !player.CanEat(nearestPlayer))
+		{
+			position = nearestFood.Position;
+		}
+		else
+		{
+			position = nearestFood.Position;
 		}
 
-		return nearestFood.Position;
+		return position;
 	}
 
 	private static Player GetNearestPlayer(Player attacker)
@@ -42,7 +61,7 @@ public class BotUtilites
 		{
 			if (player != attacker)
 			{
-				float distance = player.PlayerBlob.Position.GetDistance(attacker.PlayerBlob.Position);
+				float distance = player.PlayerBlob.Position.Distance(attacker.PlayerBlob.Position);
 				if (distance < nearestPlayerDistance)
 				{
 					nearestPlayerDistance = distance;
@@ -61,7 +80,7 @@ public class BotUtilites
 		
 		foreach (var food in Core.Game.FoodList)
 		{
-			float distance = food.Position.GetDistance(attacker.PlayerBlob.Position);
+			float distance = food.Position.Distance(attacker.PlayerBlob.Position);
 			if (distance < nearestFoodDistance)
 			{
 				nearestFoodDistance = distance;
@@ -75,11 +94,11 @@ public class BotUtilites
 	private static Vector2f GetSafePosition(Player victim, Player attacker)
 	{
 		Vector2f safePosition = victim.PlayerBlob.Position;
-		float distance = victim.PlayerBlob.Position.GetDistance(attacker.PlayerBlob.Position);
+		float distance = victim.PlayerBlob.Position.Distance(attacker.PlayerBlob.Position);
 		
-		if (distance < 200)
+		if (distance < GameConfiguration.SafeZoneDistance)
 		{
-			safePosition = victim.PlayerBlob.Position.GetPositionAwayFrom(attacker.PlayerBlob.Position, 200);
+			safePosition = victim.PlayerBlob.Position.GetPositionAwayFrom(attacker.PlayerBlob.Position, GameConfiguration.SafeZoneDistance);
 			Gizmos.DrawLine(victim.PlayerBlob.Position, attacker.PlayerBlob.Position, Color.Green);
 		}
 		
