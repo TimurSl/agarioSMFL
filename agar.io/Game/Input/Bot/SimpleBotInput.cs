@@ -4,6 +4,7 @@ using agar.io.Game.Objects;
 using SFML.System;
 using SFML.Window;
 
+
 namespace agar.io.Game.Input.Bot;
 
 public class SimpleBotInput : IInput
@@ -11,7 +12,7 @@ public class SimpleBotInput : IInput
 	private Clock clock = new Clock();
 	private float waitTime = 1;
 	private Vector2f targetPosition = new Vector2f(0, 0);
-	public Player ControllerPlayer { get; set; }
+	public Objects.Player ControllerPlayer { get; set; }
 
 	public Vector2f GetTargetPosition(Window window)
 	{

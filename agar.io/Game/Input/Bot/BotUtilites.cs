@@ -13,10 +13,10 @@ public class BotUtilites
 	/// </summary>
 	/// <param name="player">The player to check</param>
 	/// <returns>Position of food, or victim, if player can eat them</returns>
-	public static Vector2f GetNearestVictim(Player player)
+	public static Vector2f GetNearestVictim(Objects.Player player)
 	{
 		Food nearestFood = GetNearestFood(player);
-		Player nearestPlayer = GetNearestPlayer(player);
+		Objects.Player nearestPlayer = GetNearestPlayer(player);
 		
 		float distanceToFood = nearestFood.Position.Distance(player.PlayerBlob.Position);
 		float distanceToPlayer = nearestPlayer.PlayerBlob.Position.Distance(player.PlayerBlob.Position);
@@ -52,9 +52,9 @@ public class BotUtilites
 		return position;
 	}
 
-	private static Player GetNearestPlayer(Player attacker)
+	private static Objects.Player GetNearestPlayer(Objects.Player attacker)
 	{
-		Player nearestPlayer = null;
+		Objects.Player nearestPlayer = null;
 		float nearestPlayerDistance = float.MaxValue;
 		
 		foreach (var player in Core.Game.Players)
@@ -73,7 +73,7 @@ public class BotUtilites
 		return nearestPlayer;
 	}
 
-	private static Food GetNearestFood(Player attacker)
+	private static Food GetNearestFood(Objects.Player attacker)
 	{
 		Food nearestFood = null;
 		float nearestFoodDistance = float.MaxValue;
@@ -91,7 +91,7 @@ public class BotUtilites
 		return nearestFood;
 	}
 
-	private static Vector2f GetSafePosition(Player victim, Player attacker)
+	private static Vector2f GetSafePosition(Objects.Player victim, Objects.Player attacker)
 	{
 		Vector2f safePosition = victim.PlayerBlob.Position;
 		float distance = victim.PlayerBlob.Position.Distance(attacker.PlayerBlob.Position);

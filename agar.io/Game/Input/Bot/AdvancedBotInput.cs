@@ -7,7 +7,7 @@ namespace agar.io.Game.Input.Bot;
 
 public class AdvancedBotInput : IInput
 {
-	public Player ControllerPlayer { get; set; }
+	public Objects.Player ControllerPlayer { get; set; }
 	public Vector2f GetTargetPosition(Window window)
 	{
 		Vector2f direction = BotUtilites.GetNearestVictim(ControllerPlayer);

@@ -1,6 +1,5 @@
 ﻿using agar.io.Engine.Config;
 using agar.io.Game.Input.Interfaces;
-using agar.io.Game.Objects;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -10,8 +9,8 @@ namespace agar.io.Game.Input;
 public class PlayerInput : IInput
 {
 	private View camera;
-	private Dictionary<Keyboard.Key, Action> keyActions = new Dictionary<Keyboard.Key, Action> ();
-	public Player ControllerPlayer { get; set; } = Player.LocalPlayer;
+	private Dictionary<PlayerInputKey, Action> keyActions = new Dictionary<PlayerInputKey, Action> ();
+	public Objects.Player ControllerPlayer { get; set; } = Objects.Player.LocalPlayer;
 
 	public PlayerInput(View camera)
 	{
@@ -29,9 +28,9 @@ public class PlayerInput : IInput
 
 	public void HandleInput(Window window)
 	{
-		foreach (KeyValuePair<Keyboard.Key, Action> keyAction in keyActions)
+		foreach (KeyValuePair<PlayerInputKey, Action> keyAction in keyActions)
 		{
-			if (Keyboard.IsKeyPressed(keyAction.Key))
+			if (keyAction.Key.GetKeyDown ())
 			{
 				keyAction.Value.Invoke();
 			}
@@ -40,6 +39,7 @@ public class PlayerInput : IInput
 
 	public void BindKey(Keyboard.Key key, Action action)
 	{
-		keyActions.TryAdd(key, action);
+		PlayerInputKey playerInputKey = new PlayerInputKey(key);
+		keyActions.TryAdd(playerInputKey, action);
 	}
 }
