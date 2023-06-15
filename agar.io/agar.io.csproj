@@ -205,4 +205,8 @@
       <Compile Remove="Game\Fonts\**" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ZenisoftGameEngine\ZenisoftGameEngine.csproj" />
+    </ItemGroup>
+
 </Project>

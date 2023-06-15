@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "agar.io", "agar.io\agar.io.csproj", "{7A35CBF1-3DD5-48F3-A958-F80A34FC4A7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZenisoftGameEngine", "ZenisoftGameEngine\ZenisoftGameEngine.csproj", "{3D91A727-7D33-4A41-BB88-6819C47A7DF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{7A35CBF1-3DD5-48F3-A958-F80A34FC4A7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A35CBF1-3DD5-48F3-A958-F80A34FC4A7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A35CBF1-3DD5-48F3-A958-F80A34FC4A7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D91A727-7D33-4A41-BB88-6819C47A7DF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D91A727-7D33-4A41-BB88-6819C47A7DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D91A727-7D33-4A41-BB88-6819C47A7DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D91A727-7D33-4A41-BB88-6819C47A7DF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
