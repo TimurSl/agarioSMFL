@@ -74,7 +74,7 @@ public class Engine
 	private void Update()
 	{
 		Time.Update ();
-		
+
 		foreach (IUpdatable updatable in updatables)
 		{
 			if (updatable is BaseObject baseObject && !baseObject.IsInitialized)

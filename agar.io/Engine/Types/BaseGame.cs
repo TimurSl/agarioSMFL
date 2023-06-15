@@ -58,5 +58,10 @@ public abstract class BaseGame
 	{
 		Engine.drawables.Add(drawable);
 	}
+	
+	public void RegisterActor(BaseObject actor)
+	{
+		Engine.RegisterActor(actor);
+	}
 
 }

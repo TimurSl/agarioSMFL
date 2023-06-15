@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using agar.io.Engine.Interfaces;
 using agar.io.Engine.Types;
+using agar.io.Game.Animations;
 using agar.io.Game.Core.Types;
 using agar.io.Game.Input;
 using agar.io.Game.Input.Interfaces;
+using SFML_Animation_Practice.Game.Extensions;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -25,6 +27,9 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	private Vector2f tempPosition;
 	private float movementSpeed = GameConfiguration.MovementSpeed;
 	
+	private VisualEffect explosionEffect;
+	private VisualEffect portalEffect;
+	
 
 	public Player(IInput input, string nickName)
 	{
@@ -43,6 +48,11 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		BindKeys ();
 
 		this.IsPlayer = this.input is PlayerInput;
+		
+		portalEffect = new VisualEffect(PlayerBlob.Position, Directory.GetFiles(
+			Path.Combine(Directory.GetCurrentDirectory (), "Game", "Animations", "Clips", "Portal"), "*.png"));
+		portalEffect.Animation.Loop = false;
+
 	}
 
 	public void Draw(RenderTarget target)
@@ -67,14 +77,14 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		{
 			movementSpeed = GameConfiguration.MinimumMovementSpeed;
 		}
-		
+
 		UpdateCheats ();
 
-		LocalPlayer.ZIndex = 999;
-		LocalPlayer.PlayerBlob.NickNameLabel.ZIndex = 1000;
+		LocalPlayer.ZIndex = 9;
+		LocalPlayer.PlayerBlob.NickNameLabel.ZIndex = 10;
 	}
 
-	private static void UpdateCheats()
+	private void UpdateCheats()
 	{
 		if (GameConfiguration.EnableCheats)
 		{
@@ -84,7 +94,8 @@ public class Player : BaseObject, IDrawable, IUpdatable
 				{
 					if (LocalPlayer.CanEat(player))
 					{
-						Gizmos.DrawLine(LocalPlayer.PlayerBlob.Position, player.PlayerBlob.Position, Color.Cyan);
+						Gizmos.DrawLine(LocalPlayer.PlayerBlob.Position, player.PlayerBlob.Position, 
+							new Color(0, 255, 0, 255));
 					}
 				}
 			}
@@ -137,6 +148,9 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 		PlayerBlob.Position = tempPosition;
 		Gizmos.DrawLine(PlayerBlob.Position, targetPosition, Color.Red);
+		portalEffect.Shape.Position = PlayerBlob.Position;
+		portalEffect.Shape.Size = new Vector2f(PlayerBlob.Radius * 3f, PlayerBlob.Radius * 3f);
+		portalEffect.Shape.Origin = new Vector2f(portalEffect.Shape.Size.X / 2, portalEffect.Shape.Size.Y / 2);
 	}
 
 	/// <summary>
@@ -168,12 +182,22 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		{
 			newPlayer = Core.Game.Players[Core.Game.Random.Next(0, Core.Game.Players.Count)];
 		}
-
-
-		(oldPlayer.PlayerBlob, newPlayer.PlayerBlob) = (newPlayer.PlayerBlob, oldPlayer.PlayerBlob);
-		(oldPlayer.tempPosition, newPlayer.tempPosition) = (newPlayer.tempPosition, oldPlayer.tempPosition);
 		
-		newPlayer.PlayerBlob.Shape.OutlineColor = Color.Black;
+		Core.Game.Instance.RegisterActor(portalEffect);
+		portalEffect.Shape.Size = new Vector2f(newPlayer.PlayerBlob.Radius * 2, newPlayer.PlayerBlob.Radius * 2);
+		portalEffect.Shape.Position = newPlayer.PlayerBlob.Position;
+
+		portalEffect.Animation.OnAnimationEnd = () =>
+		{
+			(oldPlayer.PlayerBlob, newPlayer.PlayerBlob) = (newPlayer.PlayerBlob, oldPlayer.PlayerBlob);
+			(oldPlayer.tempPosition, newPlayer.tempPosition) = (newPlayer.tempPosition, oldPlayer.tempPosition);
+		
+			newPlayer.PlayerBlob.Shape.OutlineColor = Color.Black;
+			portalEffect.Animation.Stop ();
+		};
+
+		
+		portalEffect.Animation.Start();
 	}
 
 	/// <summary>
@@ -181,6 +205,20 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	/// </summary>
 	public new void Destroy()
 	{
+		explosionEffect = new VisualEffect(tempPosition,
+			Directory.GetFiles(
+				Path.Combine(Directory.GetCurrentDirectory (), "Game", "Animations", "Clips", "Explosion"), "*.png"));
+		Core.Game.Instance.RegisterActor(explosionEffect);
+		
+		explosionEffect.Animation.OnAnimationEnd += () =>
+		{
+			explosionEffect.Destroy();
+		};
+		
+		explosionEffect.Shape.Size = new Vector2f(PlayerBlob.Shape.Radius * 2, PlayerBlob.Shape.Radius * 2);
+		
+		explosionEffect.Animation.Start();
+		
 		if (this == LocalPlayer)
 		{
 			ChangeSoul ();
@@ -189,7 +227,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		}
 
 		base.Destroy();
-		
+	
 		Console.WriteLine($"Player {PlayerBlob.NickName} died!");
 
 		Core.Game.Players.Remove(this);
@@ -253,5 +291,6 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			}
 		}
 	}
+	
 	
 }

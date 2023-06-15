@@ -40,6 +40,7 @@ public class Blob
 		Animation.Loop = true;
 		
 		string[] files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory (), "Game", "Animations", "Clips", "Blob"), "*.png");
+		files = files.OrderBy(x => Core.Game.Random.Next()).ToArray();
 		
 		for (var i = 0; i < files.Length; i++)
 		{

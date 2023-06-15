@@ -18,6 +18,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_21.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
       <EmbeddedResource Include="Game\Fonts\arial.ttf" />
       <None Remove="Fonts\Pusia.otf" />
       <EmbeddedResource Include="Fonts\Pusia.otf">
@@ -46,6 +49,154 @@
       </EmbeddedResource>
       <None Remove="Game\Animations\Clips\Blob\Sprite_06.png" />
       <EmbeddedResource Include="Game\Animations\Clips\Blob\Sprite_06.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF01.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF01.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF02.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF02.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF03.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF03.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF04.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF04.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF05.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF05.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF06.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF06.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF07.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF07.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF08.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF08.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF09.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF09.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF10.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF10.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF11.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF11.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF12.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF12.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF13.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF13.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF14.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF14.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF15.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF15.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF16.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF16.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Explosion\C04spF17.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Explosion\C04spF17.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_01.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_01.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_02.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_02.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_03.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_03.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_04.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_04.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_05.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_05.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_06.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_06.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_07.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_07.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_08.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_08.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_09.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_09.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_10.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_10.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_11.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_11.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_12.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_12.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_13.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_13.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_14.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_14.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_15.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_15.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_16.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_16.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_17.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_17.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_18.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_18.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_19.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_19.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Portal\Sp06_20.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_20.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>

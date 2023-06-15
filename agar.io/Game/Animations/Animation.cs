@@ -18,7 +18,7 @@ public class Animation : IUpdatable
 	private float currentKeyFrameTime = 0f;
 
 	private ShapeAnimationData oldState;
-	private bool registered = false;
+	private bool canPlayed = false;
 
 	public Animation(Shape shape, bool playOnStart = false)
 	{
@@ -27,11 +27,8 @@ public class Animation : IUpdatable
 		
 		oldState = new ShapeAnimationData(shape);
 		
-		if (playOnStart)
-		{
-			agar.io.Game.Core.Game.Instance.RegisterUpdatable(this);
-			registered = true;
-		}
+		agar.io.Game.Core.Game.Instance.RegisterUpdatable(this);
+		canPlayed = playOnStart;
 	}
 	
 	/// <summary>
@@ -39,6 +36,9 @@ public class Animation : IUpdatable
 	/// </summary>
 	public void Update()
 	{
+		if (!canPlayed)
+			return;
+		
 		if (currentKeyFrameIndex < KeyFrames.Count)
 		{
 			UpdateFrames ();
@@ -76,10 +76,9 @@ public class Animation : IUpdatable
 	/// </summary>
 	public void Start()
 	{
-		if (!registered)
+		if (!canPlayed)
 		{
-			Core.Game.Instance.RegisterUpdatable(this);
-			registered = true;
+			canPlayed = true;
 		}
 		if (ResetOnStart)
 		{
@@ -118,5 +117,10 @@ public class Animation : IUpdatable
 
 
 		keyFrame.OnAnimationKeyFrame?.Invoke();
+	}
+
+	public void Stop()
+	{
+		canPlayed = false;
 	}
 }
