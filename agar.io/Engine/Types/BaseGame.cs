@@ -1,20 +1,21 @@
 using agar.io.Engine.Config;
+using agar.io.Engine.Interfaces;
 using SFML.Window;
 
-namespace agar.io.Engine.Interfaces;
+namespace agar.io.Engine.Types;
 
 public abstract class BaseGame
 {
-	protected Engine Engine { get; init; }
+	protected agar.io.Engine.Engine Engine { get; init; }
 
 	protected BaseGame()
 	{
-		Engine = new Engine();
+		Engine = new agar.io.Engine.Engine();
 		
 		Engine.OnFrameStart += OnFrameStart;
 		Engine.OnFrameEnd += OnFrameEnd;
 		
-		Engine.Window.Closed += OnWindowClosed;
+		agar.io.Engine.Engine.Window.Closed += OnWindowClosed;
 	}
 	
 	public virtual void Run()
@@ -27,6 +28,7 @@ public abstract class BaseGame
 	public virtual void Initialize()
 	{
 		Engine.DestroyAll();
+		
 	}
 
 	protected virtual void OnFrameStart()
@@ -46,4 +48,15 @@ public abstract class BaseGame
 		
 		window.Close();
 	}
+	
+	public void RegisterUpdatable(IUpdatable updatable)
+	{
+		Engine.updatables.Add(updatable);
+	}
+	
+	public void RegisterDrawable(IDrawable drawable)
+	{
+		Engine.drawables.Add(drawable);
+	}
+
 }
