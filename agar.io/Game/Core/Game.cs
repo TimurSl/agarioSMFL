@@ -14,6 +14,7 @@ namespace agar.io.Game.Core;
 public class Game : BaseGame
 {
 	public static Random Random = new();
+	public static Game Instance { get; private set; }
 	
 	public static List<Player> Players = new();
 	public static List<Food> FoodList = new();
@@ -22,10 +23,12 @@ public class Game : BaseGame
 	public static float CurrentCameraZoom = 1f;
 	
 	private Scoreboard scoreboard = new();
-	
+
+	private float cameraZoom = GameConfiguration.MaxRadiusUntilZoom;
 	public Game()
 	{
 		Camera = new View(new FloatRect(0f, 0f, EngineConfiguration.WindowWidth, EngineConfiguration.WindowHeight));
+		Instance = this;
 	}
 
 	/// <summary>
@@ -88,6 +91,7 @@ public class Game : BaseGame
 
 	protected override void OnWindowClosed(object sender, EventArgs args)
 	{
+		GameConfiguration.MaxRadiusUntilZoom = cameraZoom;
 		GameConfiguration.Save();
 		base.OnWindowClosed(sender, args);
 	}
