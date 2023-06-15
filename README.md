@@ -41,7 +41,6 @@ To run the Agar.io game:
 
 The following features and improvements can be considered for future development:
 
-- Implementing a scoring system and leaderboard.
 - Adding different game modes and levels.
 - Enhancing the game visuals and adding animations.
 - Optimizing performance and memory usage.
