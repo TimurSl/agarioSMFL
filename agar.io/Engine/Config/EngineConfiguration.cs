@@ -67,7 +67,18 @@ public class EngineConfiguration
 		foreach (string line in lines)
 		{
 			var split = line.Split (":");
+			if (split.Length != 2)
+			{
+				Console.WriteLine($"Invalid config line: {line}");
+				continue;
+			}
+			
 			var field = typeof(EngineConfiguration).GetField (split[0]);
+			if (field == null)
+			{
+				Console.WriteLine($"Invalid config line: {line}");
+				continue;
+			}
 			
 			var value = Convert.ChangeType (split[1], field.FieldType);
 			
