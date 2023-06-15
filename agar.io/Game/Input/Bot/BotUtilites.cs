@@ -1,7 +1,7 @@
-using agar.io.Engine.Types;
 using agar.io.Game.Core.Types;
 using agar.io.Game.Objects;
 using SFML.Graphics;
+using ZenisoftGameEngine.Types;
 using Vector2f = SFML.System.Vector2f;
 
 namespace agar.io.Game.Input.Bot;

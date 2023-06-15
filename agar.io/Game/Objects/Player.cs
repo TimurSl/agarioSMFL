@@ -1,15 +1,13 @@
-﻿using System.Diagnostics;
-using agar.io.Engine.Interfaces;
-using agar.io.Engine.Types;
-using agar.io.Game.Animations;
+﻿using agar.io.Game.Animations;
 using agar.io.Game.Core.Types;
 using agar.io.Game.Input;
 using agar.io.Game.Input.Interfaces;
-using SFML_Animation_Practice.Game.Extensions;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using Time = agar.io.Engine.Types.Time;
+using ZenisoftGameEngine;
+using ZenisoftGameEngine.Interfaces;
+using ZenisoftGameEngine.Types;
 
 namespace agar.io.Game.Objects;
 
@@ -64,7 +62,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 	public void Update()
 	{
-		input.HandleInput(Engine.Engine.Window);
+		input.HandleInput(Engine.Window);
 		
 		UpdateOutline ();
 		
@@ -133,7 +131,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	/// </summary>
 	private void UpdateMovement()
 	{
-		Vector2f targetPosition = input.GetTargetPosition(Engine.Engine.Window);
+		Vector2f targetPosition = input.GetTargetPosition(Engine.Window);
 		Vector2f direction = targetPosition - PlayerBlob.Position;
 		
 		if (direction != new Vector2f(0, 0))
@@ -141,7 +139,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			float magnitude = MathF.Sqrt((direction.X * direction.X) + (direction.Y * direction.Y));
 			direction /= magnitude;
 
-			tempPosition += direction * movementSpeed * Time.DeltaTime;
+			tempPosition += direction * movementSpeed * ZenisoftGameEngine.Types.Time.DeltaTime;
 		}
 		
 		ClampMovement ();

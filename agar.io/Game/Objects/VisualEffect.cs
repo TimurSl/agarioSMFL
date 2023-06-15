@@ -1,9 +1,9 @@
-using agar.io.Engine.Interfaces;
-using agar.io.Engine.Types;
 using agar.io.Game.Animations;
 using SFML_Animation_Practice.Game.Extensions;
 using SFML.Graphics;
 using SFML.System;
+using ZenisoftGameEngine.Interfaces;
+using ZenisoftGameEngine.Types;
 
 namespace agar.io.Game.Objects;
 

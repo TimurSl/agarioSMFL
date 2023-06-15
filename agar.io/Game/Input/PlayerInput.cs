@@ -1,8 +1,8 @@
-﻿using agar.io.Engine.Config;
-using agar.io.Game.Input.Interfaces;
+﻿using agar.io.Game.Input.Interfaces;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using ZenisoftGameEngine.Config;
 
 namespace agar.io.Game.Input;
 

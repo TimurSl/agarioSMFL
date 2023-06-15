@@ -1,6 +1,6 @@
-using agar.io.Engine.Interfaces;
 using agar.io.Game.Core.Types;
 using SFML.System;
+using ZenisoftGameEngine.Interfaces;
 
 namespace agar.io.Game.Objects;
 

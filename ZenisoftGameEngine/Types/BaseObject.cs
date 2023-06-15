@@ -9,7 +9,7 @@ public abstract class BaseObject
 	/// <summary>
 	/// Destroy this object, can be overriden, but make sure to call base.Destroy() at the end.
 	/// </summary>
-	internal void Destroy()
+	public void Destroy()
 	{
 		if (this is IUpdatable updatable)
 		{
