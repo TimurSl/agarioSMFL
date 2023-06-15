@@ -56,6 +56,43 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	{
 		input.HandleInput(Engine.Engine.Window);
 		
+		UpdateOutline ();
+		
+		UpdateMovement();
+
+		PlayerBlob.NickNameLabel.SetPosition(PlayerBlob.Position + new Vector2f(0, -PlayerBlob.Radius - 20));
+		
+		movementSpeed = GameConfiguration.MovementSpeed - (PlayerBlob.Radius);
+		if (movementSpeed < GameConfiguration.MinimumMovementSpeed)
+		{
+			movementSpeed = GameConfiguration.MinimumMovementSpeed;
+		}
+		
+		UpdateCheats ();
+
+		LocalPlayer.ZIndex = 999;
+		LocalPlayer.PlayerBlob.NickNameLabel.ZIndex = 1000;
+	}
+
+	private static void UpdateCheats()
+	{
+		if (GameConfiguration.EnableCheats)
+		{
+			foreach(Player player in Game.Core.Game.Players)
+			{
+				if (player != LocalPlayer)
+				{
+					if (LocalPlayer.CanEat(player))
+					{
+						Gizmos.DrawLine(LocalPlayer.PlayerBlob.Position, player.PlayerBlob.Position, Color.Cyan);
+					}
+				}
+			}
+		}
+	}
+
+	private void UpdateOutline()
+	{
 		if (this != LocalPlayer)
 		{
 			PlayerBlob.Shape.OutlineThickness = 3;
@@ -77,26 +114,6 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		{
 			PlayerBlob.Shape.OutlineThickness = 3;
 			PlayerBlob.Shape.OutlineColor = Color.Black;
-		}
-		
-		UpdateMovement();
-
-		PlayerBlob.NickNameLabel.SetPosition(PlayerBlob.Position + new Vector2f(0, -PlayerBlob.Radius - 20));
-		
-		movementSpeed = GameConfiguration.MovementSpeed - (PlayerBlob.Radius / 10f);
-		
-		if (GameConfiguration.EnableCheats)
-		{
-			foreach(Player player in Game.Core.Game.Players)
-			{
-				if (player != LocalPlayer)
-				{
-					if (LocalPlayer.CanEat(player))
-					{
-						Gizmos.DrawLine(LocalPlayer.PlayerBlob.Position, player.PlayerBlob.Position, Color.Cyan);
-					}
-				}
-			}
 		}
 	}
 
@@ -185,6 +202,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			playerInput.BindKey(Keyboard.Key.R, ChangeSoul);
 			playerInput.BindKey(Keyboard.Key.P, RandomSpectate);
 			playerInput.BindKey(Keyboard.Key.O, ReturnSpecate);
+			playerInput.BindKey(Keyboard.Key.T, () => { PlayerBlob.AddMass(100); });
 		}
 	}
 	
