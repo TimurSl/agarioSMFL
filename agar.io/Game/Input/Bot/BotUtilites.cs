@@ -95,6 +95,8 @@ public class BotUtilites
 	{
 		Vector2f safePosition = victim.PlayerBlob.Position;
 		float distance = victim.PlayerBlob.Position.Distance(attacker.PlayerBlob.Position);
+		distance -= victim.PlayerBlob.Radius;
+		distance -= attacker.PlayerBlob.Radius;
 		
 		if (distance < GameConfiguration.SafeZoneDistance)
 		{
