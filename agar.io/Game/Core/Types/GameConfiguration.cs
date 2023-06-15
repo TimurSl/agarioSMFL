@@ -19,9 +19,11 @@ public static class GameConfiguration
 	public static int MaxFood = 800;
 
 	public static float MovementSpeed = 200f;
+	public static float MinimumMovementSpeed = 50f;
 	
 	public static float SafeZoneDistance = 400f;
 	public static bool EnableCheats = false;
+	private static readonly string configPath = Path.Combine(Directory.GetCurrentDirectory (), "game.cfg");
 
 	static GameConfiguration()
 	{
@@ -39,24 +41,35 @@ public static class GameConfiguration
 				cfg.AppendLine($"{fieldInfo.Name}:{fieldInfo.GetValue(null)}");
 		}
 		
-		File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory (), "game.cfg"), cfg.ToString ());
+		File.WriteAllText(configPath, cfg.ToString ());
 	}
 
 	public static void Load()
 	{
-		if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory (), "game.cfg")))
+		if (!File.Exists(configPath))
 		{
 			Save ();
 			Console.WriteLine("Config file not found, creating new one.");
 			return;
 		}
 		
-		var lines = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory (), "game.cfg"));
+		var lines = File.ReadAllLines(configPath);
 
 		foreach (string line in lines)
 		{
 			var split = line.Split (":");
+			if (split.Length != 2)
+			{
+				Console.WriteLine($"Invalid config line: {line}");
+				continue;
+			}
+			
 			var field = typeof(GameConfiguration).GetField (split[0]);
+			if (field == null)
+			{
+				Console.WriteLine($"Invalid config line: {line}");
+				continue;
+			}
 			
 			var value = Convert.ChangeType (split[1], field.FieldType);
 			
