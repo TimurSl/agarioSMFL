@@ -28,7 +28,7 @@ public class VisualEffect : BaseObject, IDrawable
 			Texture texture = new Texture(files[i]);
 			texture.RemoveColor(new Color(0, 255, 255));
 			
-			AnimationKeyFrame keyFrame = AnimationKeyFrameBuilder.CreateKeyFrame(i * 0.1f).SetTexture(texture);
+			AnimationKeyFrame keyFrame = AnimationKeyFrameBuilder.CreateKeyFrame(i * 0.08f).SetTexture(texture);
 			Animation.KeyFrames.Add(keyFrame);
 		}
 	}

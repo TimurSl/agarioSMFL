@@ -149,7 +149,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		PlayerBlob.Position = tempPosition;
 		Gizmos.DrawLine(PlayerBlob.Position, targetPosition, Color.Red);
 		portalEffect.Shape.Position = PlayerBlob.Position;
-		portalEffect.Shape.Size = new Vector2f(PlayerBlob.Radius * 3f, PlayerBlob.Radius * 3f);
+		portalEffect.Shape.Size = new Vector2f(PlayerBlob.Radius * 2.1f, PlayerBlob.Radius * 2.1f);
 		portalEffect.Shape.Origin = new Vector2f(portalEffect.Shape.Size.X / 2, portalEffect.Shape.Size.Y / 2);
 	}
 
@@ -175,6 +175,23 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 	private void ChangeSoul()
 	{
+		Core.Game.Instance.RegisterActor(portalEffect);
+
+		AnimationKeyFrame animationKeyFrame = portalEffect.Animation.KeyFrames[^7];
+		animationKeyFrame.OnAnimationKeyFrame += () => { SoulSwap (); };
+		
+		portalEffect.Animation.KeyFrames[^7] = animationKeyFrame;
+
+		portalEffect.Animation.OnAnimationEnd = () =>
+		{
+			portalEffect.Animation.Stop ();
+		};
+		
+		portalEffect.Animation.Start();
+	}
+
+	private void SoulSwap()
+	{
 		Player oldPlayer = this;
 		Player newPlayer = Core.Game.Players[Core.Game.Random.Next(0, Core.Game.Players.Count)];
 
@@ -182,22 +199,11 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		{
 			newPlayer = Core.Game.Players[Core.Game.Random.Next(0, Core.Game.Players.Count)];
 		}
-		
-		Core.Game.Instance.RegisterActor(portalEffect);
-		portalEffect.Shape.Size = new Vector2f(newPlayer.PlayerBlob.Radius * 2, newPlayer.PlayerBlob.Radius * 2);
-		portalEffect.Shape.Position = newPlayer.PlayerBlob.Position;
 
-		portalEffect.Animation.OnAnimationEnd = () =>
-		{
-			(oldPlayer.PlayerBlob, newPlayer.PlayerBlob) = (newPlayer.PlayerBlob, oldPlayer.PlayerBlob);
-			(oldPlayer.tempPosition, newPlayer.tempPosition) = (newPlayer.tempPosition, oldPlayer.tempPosition);
-		
-			newPlayer.PlayerBlob.Shape.OutlineColor = Color.Black;
-			portalEffect.Animation.Stop ();
-		};
+		(oldPlayer.PlayerBlob, newPlayer.PlayerBlob) = (newPlayer.PlayerBlob, oldPlayer.PlayerBlob);
+		(oldPlayer.tempPosition, newPlayer.tempPosition) = (newPlayer.tempPosition, oldPlayer.tempPosition);
 
-		
-		portalEffect.Animation.Start();
+		newPlayer.PlayerBlob.Shape.OutlineColor = Color.Black;
 	}
 
 	/// <summary>
@@ -215,13 +221,13 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			explosionEffect.Destroy();
 		};
 		
-		explosionEffect.Shape.Size = new Vector2f(PlayerBlob.Shape.Radius * 2, PlayerBlob.Shape.Radius * 2);
+		explosionEffect.Shape.Size = new Vector2f(PlayerBlob.Shape.Radius * 3, PlayerBlob.Shape.Radius * 3);
 		
 		explosionEffect.Animation.Start();
 		
 		if (this == LocalPlayer)
 		{
-			ChangeSoul ();
+			SoulSwap ();
 			Console.WriteLine("You died, but soul was changed! You are now " + LocalPlayer.PlayerBlob.NickName);
 			return;
 		}
