@@ -24,6 +24,30 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
       <EmbeddedResource Remove="Game\Fonts\**" />
+      <None Remove="Game\Animations\Clips\Blob\Sprite_01.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Blob\Sprite_01.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Blob\Sprite_02.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Blob\Sprite_02.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Blob\Sprite_03.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Blob\Sprite_03.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Blob\Sprite_04.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Blob\Sprite_04.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Blob\Sprite_05.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Blob\Sprite_05.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Game\Animations\Clips\Blob\Sprite_06.png" />
+      <EmbeddedResource Include="Game\Animations\Clips\Blob\Sprite_06.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

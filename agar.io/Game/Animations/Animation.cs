@@ -111,10 +111,12 @@ public class Animation : IUpdatable
 		shape.Scale += keyFrame.ScaleOffset;
 		
 		Color newColor = shape.FillColor + keyFrame.ColorOffset;
-		shape.FillColor += newColor;
+		shape.FillColor = newColor;
 		shape.FillColor = new Color(shape.FillColor.R, shape.FillColor.G, shape.FillColor.B, (byte)(shape.FillColor.A + keyFrame.AlphaOffset));
-		shape.Texture = keyFrame.Texture;
 		
+		shape.Texture = keyFrame.Texture;
+
+
 		keyFrame.OnAnimationKeyFrame?.Invoke();
 	}
 }

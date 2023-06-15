@@ -1,4 +1,6 @@
+using agar.io.Game.Animations;
 using agar.io.Game.Core.Types;
+using SFML_Animation_Practice.Game.Extensions;
 using SFML.Graphics;
 using SFML.System;
 
@@ -11,6 +13,8 @@ public class Blob
 	public readonly Text NickNameLabel;
 	public readonly string NickName = "Player";
 	
+	public Animation Animation;
+
 	public float Radius
 	{
 		get => Shape.Radius;
@@ -32,6 +36,20 @@ public class Blob
 		Shape.OutlineThickness = 3;
 		Shape.OutlineColor = Color.Black;
 
+		Animation = new Animation(Shape, true);
+		Animation.Loop = true;
+		
+		string[] files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory (), "Game", "Animations", "Clips", "Blob"), "*.png");
+		
+		for (var i = 0; i < files.Length; i++)
+		{
+			Texture texture = new Texture(files[i]);
+			AnimationKeyFrame keyFrame =
+				AnimationKeyFrameBuilder.CreateKeyFrame(i * 0.8f).SetTexture(texture);
+			
+			Animation.KeyFrames.Add(keyFrame);
+		}
+		
 		NickName = nickName;
 		NickNameLabel = new Text(NickName, 20, Color.White, new Vector2f(0, 0));
 	}
@@ -42,7 +60,7 @@ public class Blob
 		
 		Radius += mass;
 		Radius = Math.Clamp(Radius, 0, GameConfiguration.AbsoluteMaxRadius);
-		
+
 		Shape.Origin = new Vector2f(Radius, Radius);
 		Radius = MathF.Floor(Radius);
 	}

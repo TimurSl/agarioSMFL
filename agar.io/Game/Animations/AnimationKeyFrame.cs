@@ -12,5 +12,6 @@ public struct AnimationKeyFrame
 	public Color ColorOffset { get; set; }
 	public float AlphaOffset { get; set; }
 	public Texture Texture { get; set; }
+	public IntRect TextureRect { get; set; }
 	public Action OnAnimationKeyFrame { get; set; }
 }

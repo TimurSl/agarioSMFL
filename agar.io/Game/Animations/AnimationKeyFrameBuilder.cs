@@ -53,4 +53,10 @@ public static class AnimationKeyFrameBuilder
 		keyFrame.OnAnimationKeyFrame += onKeyFrame;
 		return keyFrame;
 	}
+	
+	public static AnimationKeyFrame SetTextureRect(this AnimationKeyFrame keyFrame, IntRect textureRect)
+	{
+		keyFrame.TextureRect = textureRect;
+		return keyFrame;
+	}
 }
