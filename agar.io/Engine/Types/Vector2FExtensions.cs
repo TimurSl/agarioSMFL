@@ -4,9 +4,18 @@ namespace agar.io.Engine.Types;
 
 public static class Vector2FExtensions
 {
-	public static float Distance(this SFML.System.Vector2f vector, SFML.System.Vector2f other)
+	public static float Distance(this Vector2f vector, Vector2f other)
 	{
-		return MathF.Sqrt(MathF.Pow(vector.X - other.X, 2) + MathF.Pow(vector.Y - other.Y, 2));
+		float vectorX = vector.X - other.X;
+		float vectorY = vector.Y - other.Y;
+		return MathF.Sqrt((vectorX * vectorX) + (vectorY * vectorY));
+	}
+	
+	public static float DistanceSquared(this Vector2f vector, Vector2f other)
+	{
+		float vectorX = vector.X - other.X;
+		float vectorY = vector.Y - other.Y;
+		return (vectorX * vectorX) + (vectorY * vectorY);
 	}
 
 	public static Vector2f GetPositionAwayFrom(this Vector2f vector, Vector2f other, float distance)
