@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+        <PackageId>Zenisoft.GameEngine</PackageId>
+        <Title>Zenisoft Game Engine</Title>
+        <Authors>Zenisoft</Authors>
+        <Description>ZenisoftGameEngine, written with SFML and love♥</Description>
+        <Copyright>Zenisoft</Copyright>
+        <PackageProjectUrl>https://zenisoft.net.ua</PackageProjectUrl>
+        <PackageIcon>newZenisoftLogoBACKGROUND.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/TimurSl/agarioSMFL</RepositoryUrl>
+        <PackageTags>game;engine;sfml</PackageTags>
+        <PackageOutputPath>$(OutputPath)</PackageOutputPath>
+        <NeutralLanguage>en-029</NeutralLanguage>
+        <IncludeSymbols>False</IncludeSymbols>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="E:\Images\Logo\newZenisoftLogoBACKGROUND.png">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SFML.Net" Version="2.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="README.md">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
+
+</Project>
