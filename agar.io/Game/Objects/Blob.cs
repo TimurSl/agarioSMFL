@@ -57,7 +57,17 @@ public class Blob
 	public void AddMass(float mass)
 	{
 		if (Radius + mass > GameConfiguration.AbsoluteMaxRadius)
+		{
+			int chance = mass > 70 ? 70 : (int) mass;
+			if (Core.Game.Lucky(chance))
+			{
+				Radius = 30;
+				Radius = Math.Clamp(Radius, 0, GameConfiguration.AbsoluteMaxRadius);
+				Shape.Origin = new Vector2f(Radius, Radius);
+				Radius = MathF.Floor(Radius);
+			}
 			return;
+		}
 		
 		Radius += mass;
 		Radius = Math.Clamp(Radius, 0, GameConfiguration.AbsoluteMaxRadius);
