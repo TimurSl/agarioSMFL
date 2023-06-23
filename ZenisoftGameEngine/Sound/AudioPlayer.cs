@@ -1,3 +1,5 @@
+using SFML.Audio;
+
 namespace ZenisoftGameEngine.Sound;
 
 public class AudioPlayer
@@ -12,8 +14,17 @@ public class AudioPlayer
 		foreach(string pathToClip in AudioClipsList)
 		{
 			string name = pathToClip.Split('\\').Last().Split('.').First();
+
+			try
+			{
+				SoundBuffer buffer = new SoundBuffer(pathToClip);
 			
-			audioClips.Add(name, new SFML.Audio.Sound(new SFML.Audio.SoundBuffer(pathToClip)));
+				audioClips.Add(name, new SFML.Audio.Sound(buffer));
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Failed to load audio clip: " + name);
+			}
 		}
 	}
 	

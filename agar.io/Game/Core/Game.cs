@@ -76,17 +76,25 @@ public class Game : BaseGame
 		}
 
 		string[] audioFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory (), "Sounds"));
+		audioFiles = audioFiles.Where(x => x.EndsWith(".wav") || x.EndsWith("ogg")).ToArray();
+		
+		string[] musicFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory (), "Music"));
+		musicFiles = musicFiles.Where(x => x.EndsWith(".wav") || x.EndsWith("ogg")).ToArray();
 
-		foreach(string audioFile in audioFiles)
-		{
-			audioPlayer.AudioClipsList.Add(audioFile);
-		}
+		audioPlayer.AudioClipsList.AddRange(audioFiles);
+		audioPlayer.AudioClipsList.AddRange(musicFiles);
+		
 		audioPlayer.LoadAudioClips();
 		audioPlayer.SetVolume(20f);
+		
+		Thread thread = new Thread(() => AudioPlayer.PlayAudioClip("EasternMusic", true));
+		thread.Start();
+		
 	}
 
 	protected override void OnFrameStart()
 	{
+
 		Engine.Window.SetView(Camera);
 		CheckZoom ();
 	}

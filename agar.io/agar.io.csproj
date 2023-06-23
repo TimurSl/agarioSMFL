@@ -214,6 +214,10 @@
       <EmbeddedResource Include="Sounds\soul_swap.ogg">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <None Remove="Music\EasternMusic.ogg" />
+      <EmbeddedResource Include="Music\EasternMusic.ogg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
