@@ -52,9 +52,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			Path.Combine(Directory.GetCurrentDirectory (), "Game", "Animations", "Clips", "Portal"), "*.png"));
 		portalEffect.Animation.Loop = false;
 		
-		explosionEffect = new VisualEffect(tempPosition,
-			Directory.GetFiles(
-				Path.Combine(Directory.GetCurrentDirectory (), "Game", "Animations", "Clips", "Explosion"), "*.png"));
+		
 
 	}
 
@@ -217,6 +215,9 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	/// </summary>
 	public new void Destroy()
 	{
+		explosionEffect = new VisualEffect(tempPosition,
+			Directory.GetFiles(
+				Path.Combine(Directory.GetCurrentDirectory (), "Game", "Animations", "Clips", "Explosion"), "*.png"));
 		Core.Game.Instance.RegisterActor(explosionEffect);
 
 		explosionEffect.Animation.OnAnimationEnd += () =>
