@@ -7,6 +7,7 @@ using SFML.System;
 using SFML.Window;
 using ZenisoftGameEngine;
 using ZenisoftGameEngine.Interfaces;
+using ZenisoftGameEngine.Sound;
 using ZenisoftGameEngine.Types;
 
 namespace agar.io.Game.Objects;
@@ -50,6 +51,10 @@ public class Player : BaseObject, IDrawable, IUpdatable
 		portalEffect = new VisualEffect(PlayerBlob.Position, Directory.GetFiles(
 			Path.Combine(Directory.GetCurrentDirectory (), "Game", "Animations", "Clips", "Portal"), "*.png"));
 		portalEffect.Animation.Loop = false;
+		
+		explosionEffect = new VisualEffect(tempPosition,
+			Directory.GetFiles(
+				Path.Combine(Directory.GetCurrentDirectory (), "Game", "Animations", "Clips", "Explosion"), "*.png"));
 
 	}
 
@@ -173,6 +178,8 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 	private void ChangeSoul()
 	{
+		AudioPlayer.PlayAudioClip("soul_swap");
+
 		Core.Game.Instance.RegisterActor(portalEffect);
 
 		AnimationKeyFrame animationKeyFrame = portalEffect.Animation.KeyFrames[^7];
@@ -185,6 +192,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 			portalEffect.Animation.Stop ();
 		};
 		
+		portalEffect.Animation.AnimationSpeedMultiplier = 0.5f;
 		portalEffect.Animation.Start();
 	}
 
@@ -209,11 +217,8 @@ public class Player : BaseObject, IDrawable, IUpdatable
 	/// </summary>
 	public new void Destroy()
 	{
-		explosionEffect = new VisualEffect(tempPosition,
-			Directory.GetFiles(
-				Path.Combine(Directory.GetCurrentDirectory (), "Game", "Animations", "Clips", "Explosion"), "*.png"));
 		Core.Game.Instance.RegisterActor(explosionEffect);
-		
+
 		explosionEffect.Animation.OnAnimationEnd += () =>
 		{
 			explosionEffect.Destroy();
