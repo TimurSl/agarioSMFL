@@ -7,6 +7,7 @@ using SFML.Graphics;
 using SFML.System;
 using ZenisoftGameEngine;
 using ZenisoftGameEngine.Config;
+using ZenisoftGameEngine.Sound;
 using ZenisoftGameEngine.Types;
 
 namespace agar.io.Game.Core;
@@ -24,6 +25,8 @@ public class Game : BaseGame
 	private readonly float cameraZoom = GameConfiguration.MaxRadiusUntilZoom;
 
 	private readonly Scoreboard scoreboard = new();
+	
+	private AudioPlayer audioPlayer = new AudioPlayer();
 
 	public Game()
 	{
@@ -71,6 +74,15 @@ public class Game : BaseGame
 			Console.WriteLine("Failed to initialize game, try again");
 			Initialize ();
 		}
+
+		string[] audioFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory (), "Sounds"));
+
+		foreach(string audioFile in audioFiles)
+		{
+			audioPlayer.AudioClipsList.Add(audioFile);
+		}
+		audioPlayer.LoadAudioClips();
+		audioPlayer.SetVolume(20f);
 	}
 
 	protected override void OnFrameStart()
@@ -106,6 +118,7 @@ public class Game : BaseGame
 	private void CheckCollisionWithFood(Player attacker)
 	{
 		for (var foodId = 0; foodId < FoodList.Count; foodId++)
+		{
 			if (CheckCollision(attacker.PlayerBlob.Shape, FoodList[foodId].shape))
 			{
 				attacker.PlayerBlob.AddMass(1);
@@ -113,9 +126,20 @@ public class Game : BaseGame
 				FoodList[foodId].Destroy ();
 
 				var food = CreateFood ();
-
+				
 				FoodList.Add(food ?? throw new NullReferenceException ());
+				
+				if (GameConfiguration.OnlyLocalPlayerCanPlaySounds)
+				{
+					if (attacker == Player.LocalPlayer)
+						AudioPlayer.PlayAudioClip("pop");
+				}
+				else
+				{
+					AudioPlayer.PlayAudioClip("pop");
+				}
 			}
+		}
 	}
 
 
@@ -141,12 +165,25 @@ public class Game : BaseGame
 					attacker.EatPlayer(victim);
 				else
 					victim.EatPlayer(attacker);
+				
 
 				var bot = CreatePlayer(new AdvancedBotInput ());
 
 				Players.Add(bot ?? throw new NullReferenceException ());
+				
+				if (GameConfiguration.OnlyLocalPlayerCanPlaySounds)
+				{
+					if (attacker == Player.LocalPlayer)
+						AudioPlayer.PlayAudioClip("kill");
+				}
+				else
+				{
+					AudioPlayer.PlayAudioClip("kill");
+				}
 			}
 		}
+		
+
 	}
 
 
@@ -223,5 +260,10 @@ public class Game : BaseGame
 
 		var player = Engine.RegisterActor(new Player(input, nickname)) as Player;
 		return player;
+	}
+	
+	public static bool Lucky(int chance)
+	{
+		return Random.Next(0, 100) < chance;
 	}
 }

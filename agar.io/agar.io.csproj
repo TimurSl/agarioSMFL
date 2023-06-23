@@ -199,6 +199,21 @@
       <EmbeddedResource Include="Game\Animations\Clips\Portal\Sp06_20.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <None Remove="Sounds\pop.mp3" />
+      <None Remove="Sounds\kill.mp3" />
+      <None Remove="Sounds\portal.mp3" />
+      <None Remove="Sounds\kill.ogg" />
+      <EmbeddedResource Include="Sounds\kill.ogg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Sounds\pop.ogg" />
+      <EmbeddedResource Include="Sounds\pop.ogg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Sounds\soul_swap.ogg" />
+      <EmbeddedResource Include="Sounds\soul_swap.ogg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

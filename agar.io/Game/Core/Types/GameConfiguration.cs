@@ -23,6 +23,8 @@ public static class GameConfiguration
 	
 	public static float SafeZoneDistance = 400f;
 	public static bool EnableCheats = false;
+	public static bool OnlyLocalPlayerCanPlaySounds = false;
+	
 	private static readonly string configPath = Path.Combine(Directory.GetCurrentDirectory (), "game.cfg");
 
 	static GameConfiguration()
