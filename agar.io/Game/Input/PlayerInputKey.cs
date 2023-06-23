@@ -27,14 +27,4 @@ public class PlayerInputKey
 		
 		return isDown;
 	}
-	
-	public bool GetKeyUp()
-	{
-		bool isPressed = Keyboard.IsKeyPressed(Key);
-		bool isUp = !isPressed && wasPressed;
-		
-		wasPressed = isPressed;
-		
-		return isUp;
-	}
 }
