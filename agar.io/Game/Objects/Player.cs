@@ -176,7 +176,7 @@ public class Player : BaseObject, IDrawable, IUpdatable
 
 	private void ChangeSoul()
 	{
-		AudioPlayer.PlayAudioClip("soul_swap");
+		AudioSystem.PlayAudioClip("soul_swap");
 
 		Core.Game.Instance.RegisterActor(portalEffect);
 

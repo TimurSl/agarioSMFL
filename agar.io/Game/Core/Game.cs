@@ -26,7 +26,7 @@ public class Game : BaseGame
 
 	private readonly Scoreboard scoreboard = new();
 	
-	private AudioPlayer audioPlayer = new AudioPlayer();
+	private AudioSystem audioSystem = new AudioSystem();
 
 	public Game()
 	{
@@ -81,13 +81,13 @@ public class Game : BaseGame
 		string[] musicFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory (), "Music"));
 		musicFiles = musicFiles.Where(x => x.EndsWith(".wav") || x.EndsWith("ogg")).ToArray();
 
-		audioPlayer.AudioClipsList.AddRange(audioFiles);
-		audioPlayer.AudioClipsList.AddRange(musicFiles);
+		audioSystem.AudioClipsList.AddRange(audioFiles);
+		audioSystem.AudioClipsList.AddRange(musicFiles);
 		
-		audioPlayer.LoadAudioClips();
-		audioPlayer.SetVolume(20f);
+		audioSystem.LoadAudioClips();
+		audioSystem.SetVolume(20f);
 		
-		Thread thread = new Thread(() => AudioPlayer.PlayAudioClip("EasternMusic", true));
+		Thread thread = new Thread(() => AudioSystem.PlayAudioClip("EasternMusic", true));
 		thread.Start();
 		
 	}
@@ -140,11 +140,11 @@ public class Game : BaseGame
 				if (GameConfiguration.OnlyLocalPlayerCanPlaySounds)
 				{
 					if (attacker == Player.LocalPlayer)
-						AudioPlayer.PlayAudioClip("pop");
+						AudioSystem.PlayAudioClip("pop");
 				}
 				else
 				{
-					AudioPlayer.PlayAudioClip("pop");
+					AudioSystem.PlayAudioClip("pop");
 				}
 			}
 		}
@@ -182,11 +182,11 @@ public class Game : BaseGame
 				if (GameConfiguration.OnlyLocalPlayerCanPlaySounds)
 				{
 					if (attacker == Player.LocalPlayer)
-						AudioPlayer.PlayAudioClip("kill");
+						AudioSystem.PlayAudioClip("kill");
 				}
 				else
 				{
-					AudioPlayer.PlayAudioClip("kill");
+					AudioSystem.PlayAudioClip("kill");
 				}
 			}
 		}

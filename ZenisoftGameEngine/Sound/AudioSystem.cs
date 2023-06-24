@@ -2,7 +2,7 @@ using SFML.Audio;
 
 namespace ZenisoftGameEngine.Sound;
 
-public class AudioPlayer
+public class AudioSystem
 {
 	public List<string> AudioClipsList = new List<string>();
 	

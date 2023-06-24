@@ -75,7 +75,7 @@ namespace agar.io.Game.Objects
         {
             if (localPlayerPosition == 0 && !previousFirstPlaceIsLocalPlayer)
             {
-                AudioPlayer.PlayAudioClip("levelup");
+                AudioSystem.PlayAudioClip("levelup");
                 previousFirstPlaceIsLocalPlayer = true;
             }
             else if (localPlayerPosition > 0)
