@@ -1,3 +1,4 @@
+using SFML.Graphics;
 using SFML.Window;
 using ZenisoftGameEngine.Config;
 using ZenisoftGameEngine.Interfaces;
@@ -62,6 +63,11 @@ public abstract class BaseGame
 	public void RegisterActor(BaseObject actor)
 	{
 		Engine.RegisterActor(actor);
+	}
+
+	public RenderTarget GetDrawTarget()
+	{
+		return Engine.Window;
 	}
 
 }

@@ -94,7 +94,6 @@ public class Game : BaseGame
 
 	protected override void OnFrameStart()
 	{
-
 		Engine.Window.SetView(Camera);
 		CheckZoom ();
 	}
@@ -135,7 +134,8 @@ public class Game : BaseGame
 
 				var food = CreateFood ();
 				
-				FoodList.Add(food ?? throw new NullReferenceException ());
+				if (food != null)
+					FoodList.Add(food);
 				
 				if (GameConfiguration.OnlyLocalPlayerCanPlaySounds)
 				{

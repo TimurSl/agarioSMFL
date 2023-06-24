@@ -34,6 +34,7 @@ public class AudioPlayer
 		{
 			audioClip.Loop = loop;
 			audioClip.Play();
+
 		}
 	}
 	
